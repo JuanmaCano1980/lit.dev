@@ -112,6 +112,90 @@ export const mockCharacters = [
     stories: { available: 220 },
     events: { available: 9 },
   },
+  {
+    id: 9,
+    name: 'The Thing',
+    description:
+      'Ben Grimm, conocido como The Thing, es miembro de los Cuatro Fantásticos. Su cuerpo está cubierto de una roca naranja superresistente y posee una fuerza sobrehumana. Es famoso por su frase: ¡Es hora de las tortas!',
+    thumbnail: {
+      path: 'https://cdn.marvel.com/content/1x/214thg_com_crd_01',
+      extension: 'jpg',
+    },
+    comics: { available: 170 },
+    series: { available: 24 },
+    stories: { available: 260 },
+    events: { available: 9 },
+  },
+  {
+    id: 10,
+    name: 'Vision',
+    description:
+      'Vision es un androide sintético creado por Ultron y miembro de los Vengadores. Posee la capacidad de alterar su densidad, volverse intangible y disparar rayos de energía.',
+    thumbnail: {
+      path: 'https://i.annihil.us/u/prod/marvel/i/mg/6/70/526547e2d90ad',
+      extension: 'jpg',
+    },
+    comics: { available: 95 },
+    series: { available: 14 },
+    stories: { available: 160 },
+    events: { available: 5 },
+  },
+  {
+    id: 11,
+    name: 'Hawkeye',
+    description:
+      'Clint Barton, conocido como Hawkeye, es el mejor arquero del mundo y miembro de los Vengadores. Es experto en combate cuerpo a cuerpo y utiliza una variedad de flechas especiales.',
+    thumbnail: {
+      path: 'https://i.annihil.us/u/prod/marvel/i/mg/9/03/537ba26276348',
+      extension: 'jpg',
+    },
+    comics: { available: 105 },
+    series: { available: 16 },
+    stories: { available: 170 },
+    events: { available: 6 },
+  },
+  {
+    id: 12,
+    name: 'Captain Marvel',
+    description:
+      'Carol Danvers, la Capitana Marvel, es una de las heroínas más poderosas del universo Marvel. Posee superfuerza, vuelo y la capacidad de absorber y proyectar energía.',
+    thumbnail: {
+      path: 'https://cdn.marvel.com/content/1x/008cmv_ons_crd_05',
+      extension: 'jpg',
+    },
+    comics: { available: 140 },
+    series: { available: 21 },
+    stories: { available: 230 },
+    events: { available: 8 },
+  },
+  {
+    id: 13,
+    name: 'Ant-Man',
+    description:
+      'Scott Lang, el segundo Ant-Man, es un ladrón reformado que utiliza un traje especial para encogerse y comunicarse con insectos. Es miembro de los Vengadores y un héroe inesperado.',
+    thumbnail: {
+      path: 'https://cdn.marvel.com/content/1x/010ant_ons_crd_05',
+      extension: 'jpg',
+    },
+    comics: { available: 85 },
+    series: { available: 12 },
+    stories: { available: 140 },
+    events: { available: 4 },
+  },
+  {
+    id: 14,
+    name: 'Wolverine',
+    description:
+      'Logan, conocido como Wolverine, es un mutante con factor curativo, sentidos agudos y garras retráctiles de adamantium. Es miembro de los X-Men y uno de los héroes más icónicos de Marvel.',
+    thumbnail: {
+      path: 'https://cdn.marvel.com/content/1x/034wlv_com_crd_01',
+      extension: 'jpg',
+    },
+    comics: { available: 210 },
+    series: { available: 32 },
+    stories: { available: 410 },
+    events: { available: 13 },
+  },
 ];
 
 // Simular respuesta de la API

@@ -97,7 +97,7 @@ export class CharacterList extends LitElement {
     }
     .characters-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, 245px);
+      grid-template-columns: repeat(auto-fill, 188.57px);
       gap: 1rem;
       justify-items: start;
       justify-content: start;
