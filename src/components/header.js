@@ -17,22 +17,21 @@ export class MarvelHeader extends LitElement {
       width: 100%;
       display: flex;
       align-items: center;
-      padding: 0 32px;
-      min-height: 64px;
+      padding: 0 3rem;
+      min-height: 84px;
       box-sizing: border-box;
       background: #000;
-      gap: 24px;
     }
     .logo {
       display: flex;
       align-items: center;
-      height: 32px;
-      margin-right: 16px;
+      width: 130px;
+      height: auto;
       flex-shrink: 0;
     }
     .logo-img {
-      height: 32px;
-      width: auto;
+      height: auto;
+      width: 100%;
       display: block;
     }
     .back-btn {

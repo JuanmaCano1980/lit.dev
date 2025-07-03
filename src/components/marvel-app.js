@@ -16,14 +16,8 @@ export class MarvelApp extends LitElement {
       background-color: #f5f5f5;
     }
 
-    .app-container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 1rem;
-    }
-
     .main-content {
-      padding: 2rem 0;
+      padding: 3rem;
     }
   `;
 
@@ -45,23 +39,21 @@ export class MarvelApp extends LitElement {
 
   render() {
     return html`
-      <div class="app-container">
-        <marvel-header
-          @back-to-list=${this._handleBackToList}
-          .view=${this.view}
-        ></marvel-header>
+      <marvel-header
+        @back-to-list=${this._handleBackToList}
+        .view=${this.view}
+      ></marvel-header>
 
-        <main class="main-content">
-          ${this.view === 'list'
-            ? html`<character-list
-                @character-selected=${this._handleCharacterSelect}
-              ></character-list>`
-            : html`<character-detail
-                .character=${this.selectedCharacter}
-                @back-to-list=${this._handleBackToList}
-              ></character-detail>`}
-        </main>
-      </div>
+      <main class="main-content">
+        ${this.view === 'list'
+          ? html`<character-list
+              @character-selected=${this._handleCharacterSelect}
+            ></character-list>`
+          : html`<character-detail
+              .character=${this.selectedCharacter}
+              @back-to-list=${this._handleBackToList}
+            ></character-detail>`}
+      </main>
     `;
   }
 }

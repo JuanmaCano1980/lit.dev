@@ -112,20 +112,6 @@ export const mockCharacters = [
     stories: { available: 220 },
     events: { available: 9 },
   },
-  {
-    id: 9,
-    name: 'Scarlet Witch',
-    description:
-      'Wanda Maximoff, la Scarlet Witch, posee poderes de realidad alteración y magia caótica. Sus habilidades la convierten en una de las heroínas más poderosas del universo Marvel, capaz de cambiar la realidad misma.',
-    thumbnail: {
-      path: 'https://i.annihil.us/u/prod/marvel/i/mg/6/70/5261a7d7c394b',
-      extension: 'jpg',
-    },
-    comics: { available: 85 },
-    series: { available: 12 },
-    stories: { available: 170 },
-    events: { available: 7 },
-  },
 ];
 
 // Simular respuesta de la API
