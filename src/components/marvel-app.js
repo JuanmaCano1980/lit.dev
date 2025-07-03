@@ -37,10 +37,16 @@ export class MarvelApp extends LitElement {
     this.selectedCharacter = null;
   }
 
+  _handleGoHome() {
+    this.view = 'list';
+    this.selectedCharacter = null;
+  }
+
   render() {
     return html`
       <marvel-header
         @back-to-list=${this._handleBackToList}
+        @go-home=${this._handleGoHome}
         .view=${this.view}
       ></marvel-header>
 

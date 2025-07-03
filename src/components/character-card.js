@@ -42,6 +42,10 @@ export class CharacterCard extends LitElement {
       height: 100%;
       object-fit: cover;
       display: block;
+      transition: transform 0.35s cubic-bezier(0.4, 0.2, 0.2, 1);
+    }
+    .card:hover .character-image {
+      transform: scale(1.08);
     }
     .card-footer {
       background: #111;
@@ -52,6 +56,31 @@ export class CharacterCard extends LitElement {
       padding: 0.7em 1em 0.7em 1em;
       position: relative;
       min-height: 48px;
+      transition: color 0.25s;
+      overflow: hidden;
+      z-index: 1;
+    }
+    .card-footer::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 0%;
+      background: #e62429;
+      z-index: 0;
+      transition: height 0.35s cubic-bezier(0.4, 0.2, 0.2, 1);
+    }
+    .card:hover .card-footer::before {
+      height: 100%;
+    }
+    .card-footer > * {
+      position: relative;
+      z-index: 1;
+      transition: color 0.25s;
+    }
+    .card:hover .card-footer > * {
+      color: #fff;
     }
     .divider {
       position: absolute;
@@ -74,6 +103,10 @@ export class CharacterCard extends LitElement {
       overflow: hidden;
       text-overflow: ellipsis;
       z-index: 1;
+      transition: color 0.25s;
+    }
+    .card:hover .character-name {
+      color: #fff;
     }
     .favorite-btn {
       background: none;
@@ -104,6 +137,10 @@ export class CharacterCard extends LitElement {
     .favorite-btn.filled .favorite-icon {
       fill: #ed1d24;
       stroke: #ed1d24;
+    }
+    .card:hover .favorite-btn.filled .favorite-icon {
+      stroke: #fff;
+      stroke-width: 2.5px;
     }
     @media (max-width: 600px) {
       .card {

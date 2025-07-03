@@ -94,10 +94,20 @@ export class MarvelHeader extends LitElement {
     this.dispatchEvent(new CustomEvent('back-to-list'));
   }
 
+  _handleLogoClick() {
+    this.dispatchEvent(
+      new CustomEvent('go-home', { bubbles: true, composed: true })
+    );
+  }
+
   render() {
     return html`
       <header class="header-container">
-        <div class="logo">
+        <div
+          class="logo"
+          @click=${() => this._handleLogoClick()}
+          style="cursor:pointer;"
+        >
           <img src="/marvel.svg" alt="Marvel Logo" class="logo-img" />
         </div>
         ${this.view === 'detail'
