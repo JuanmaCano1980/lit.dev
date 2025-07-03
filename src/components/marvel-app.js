@@ -1,7 +1,8 @@
-import { LitElement, html, css } from 'lit';
-import './header.js';
+import { LitElement, html } from 'lit';
+import './marvel-header.js';
 import './character-list.js';
 import './character-detail.js';
+import { marvelAppStyle } from './marvel-app-style';
 
 export class MarvelApp extends LitElement {
   static properties = {
@@ -10,17 +11,9 @@ export class MarvelApp extends LitElement {
     favoritesCount: { type: Number },
   };
 
-  static styles = css`
-    :host {
-      display: block;
-      min-height: 100vh;
-      background-color: #f5f5f5;
-    }
-
-    .main-content {
-      padding: 3rem;
-    }
-  `;
+  static get styles() {
+    return [marvelAppStyle];
+  }
 
   constructor() {
     super();
