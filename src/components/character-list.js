@@ -97,30 +97,16 @@ export class CharacterList extends LitElement {
     }
     .characters-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(172.5px, 1fr));
+      grid-template-columns: repeat(auto-fill, 245px);
       gap: 1rem;
-      justify-items: center;
+      justify-items: start;
+      justify-content: start;
+      width: 100%;
+      overflow-x: auto;
     }
-
-    @media (min-width: 600px) {
+    @media (max-width: 600px) {
       .characters-grid {
-        grid-template-columns: repeat(auto-fit, minmax(172.5px, 1fr));
-        max-width: calc(4 * 172.5px + 3 * 16px);
-        margin: 0 auto;
-      }
-    }
-
-    @media (min-width: 1024px) {
-      .characters-grid {
-        grid-template-columns: repeat(auto-fit, minmax(172.5px, 1fr));
-        max-width: calc(7 * 172.5px + 6 * 16px);
-      }
-    }
-
-    @media (min-width: 1440px) {
-      .characters-grid {
-        grid-template-columns: repeat(auto-fit, minmax(172.5px, 1fr));
-        max-width: calc(10 * 172.5px + 9 * 16px);
+        grid-template-columns: repeat(auto-fill, 172.5px);
       }
     }
     .loading,
@@ -180,6 +166,10 @@ export class CharacterList extends LitElement {
     // Persistir favoritos
     const favIds = this.characters.filter((c) => c.favorite).map((c) => c.id);
     localStorage.setItem('marvel-favorites', JSON.stringify(favIds));
+    // Emitir evento para actualizar el header
+    this.dispatchEvent(
+      new CustomEvent('favorites-changed', { bubbles: true, composed: true })
+    );
   }
 
   get filteredCharacters() {

@@ -16,10 +16,6 @@ export class CharacterCard extends LitElement {
       overflow: hidden;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
       transition: box-shadow 0.2s;
-      width: 172.5px;
-      min-width: 172.5px;
-      max-width: 220px;
-      margin: 0 auto;
       clip-path: polygon(
         0 0,
         100% 0,
@@ -74,26 +70,9 @@ export class CharacterCard extends LitElement {
     .card:hover .card-footer::before {
       height: 100%;
     }
-    .card-footer > * {
-      position: relative;
-      z-index: 1;
-      transition: color 0.25s;
-    }
-    .card:hover .card-footer > * {
-      color: #fff;
-    }
-    .divider {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 3px;
-      background: #ed1d24;
-      border-radius: 2px 2px 0 0;
-    }
     .character-name {
-      font-size: 1em;
-      font-weight: 600;
+      font-size: 14px;
+      font-weight: 400;
       letter-spacing: 0.04em;
       text-transform: uppercase;
       color: #fff;
@@ -103,10 +82,6 @@ export class CharacterCard extends LitElement {
       overflow: hidden;
       text-overflow: ellipsis;
       z-index: 1;
-      transition: color 0.25s;
-    }
-    .card:hover .character-name {
-      color: #fff;
     }
     .favorite-btn {
       background: none;
@@ -139,14 +114,34 @@ export class CharacterCard extends LitElement {
       stroke: #ed1d24;
     }
     .card:hover .favorite-btn.filled .favorite-icon {
+      fill: #fff;
       stroke: #fff;
-      stroke-width: 2.5px;
+      stroke-width: 1.5px;
+    }
+    .favorite-icon.pop {
+      animation: pop-fav 0.45s cubic-bezier(0.4, 1.4, 0.6, 1) both;
+    }
+    @keyframes pop-fav {
+      0% {
+        transform: scale(1);
+        filter: drop-shadow(0 0 0 #fff) drop-shadow(0 0 0 #ed1d24);
+      }
+      30% {
+        transform: scale(1.6);
+        filter: drop-shadow(0 0 16px #fff) drop-shadow(0 0 8px #ed1d24);
+      }
+      60% {
+        transform: scale(1.1);
+        filter: drop-shadow(0 0 8px #fff) drop-shadow(0 0 4px #ed1d24);
+      }
+      100% {
+        transform: scale(1);
+        filter: drop-shadow(0 0 0 #fff) drop-shadow(0 0 0 #ed1d24);
+      }
     }
     @media (max-width: 600px) {
       .card {
         width: 100%;
-        min-width: 0;
-        max-width: 100vw;
       }
     }
   `;
@@ -163,6 +158,19 @@ export class CharacterCard extends LitElement {
 
   _handleFavoriteClick(e) {
     e.stopPropagation();
+    const icon = e.currentTarget.querySelector('.favorite-icon');
+    if (icon) {
+      icon.classList.remove('pop');
+      void icon.offsetWidth;
+      icon.classList.add('pop');
+      icon.addEventListener(
+        'animationend',
+        () => {
+          icon.classList.remove('pop');
+        },
+        { once: true }
+      );
+    }
     this.dispatchEvent(
       new CustomEvent('toggle-favorite', {
         detail: this.character,
