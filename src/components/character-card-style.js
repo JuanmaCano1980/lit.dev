@@ -78,62 +78,13 @@ export const characterCardStyle = css`
     text-overflow: ellipsis;
     z-index: 1;
   }
-  .favorite-btn {
-    background: none;
-    border: none;
-    outline: none;
-    cursor: pointer;
-    margin-left: 0.5em;
-    z-index: 2;
-    display: flex;
-    align-items: center;
-    padding: 0;
-    transition: transform 0.15s;
+
+  /* Asegurar que el botón de favoritos esté siempre visible */
+  favorite-button {
+    position: relative;
+    z-index: 10;
   }
-  .favorite-btn:active {
-    transform: scale(0.92);
-  }
-  .favorite-icon {
-    width: 22px;
-    height: 22px;
-    display: block;
-    fill: #fff;
-    stroke: #fff;
-    stroke-width: 1.5px;
-    transition:
-      fill 0.2s,
-      stroke 0.2s;
-  }
-  .favorite-btn.filled .favorite-icon {
-    fill: #ed1d24;
-    stroke: #ed1d24;
-  }
-  .card:hover .favorite-btn.filled .favorite-icon {
-    fill: #fff;
-    stroke: #fff;
-    stroke-width: 1.5px;
-  }
-  .favorite-icon.pop {
-    animation: pop-fav 0.45s cubic-bezier(0.4, 1.4, 0.6, 1) both;
-  }
-  @keyframes pop-fav {
-    0% {
-      transform: scale(1);
-      filter: drop-shadow(0 0 0 #fff) drop-shadow(0 0 0 #ed1d24);
-    }
-    30% {
-      transform: scale(1.6);
-      filter: drop-shadow(0 0 16px #fff) drop-shadow(0 0 8px #ed1d24);
-    }
-    60% {
-      transform: scale(1.1);
-      filter: drop-shadow(0 0 8px #fff) drop-shadow(0 0 4px #ed1d24);
-    }
-    100% {
-      transform: scale(1);
-      filter: drop-shadow(0 0 0 #fff) drop-shadow(0 0 0 #ed1d24);
-    }
-  }
+
   @media (max-width: 600px) {
     .card {
       width: 100%;

@@ -8,6 +8,10 @@ export const marvelAppStyle = css`
   }
 
   .main-content {
+    padding: 0;
+  }
+
+  .main-content.home {
     padding: 3rem;
   }
 `;

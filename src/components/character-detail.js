@@ -1,5 +1,6 @@
 import { LitElement, html } from 'lit';
 import { characterDetailStyle } from './character-detail-style';
+import './favorite-button.js';
 
 export class CharacterDetail extends LitElement {
   static properties = {
@@ -10,8 +11,11 @@ export class CharacterDetail extends LitElement {
     return [characterDetailStyle];
   }
 
-  _handleBackClick() {
-    this.dispatchEvent(new CustomEvent('back-to-list'));
+  _handleFavoriteToggled(e) {
+    // Emitir evento para que marvel-app actualice el contador
+    this.dispatchEvent(
+      new CustomEvent('favorites-changed', { bubbles: true, composed: true })
+    );
   }
 
   render() {
@@ -27,70 +31,57 @@ export class CharacterDetail extends LitElement {
         ? `${this.character.thumbnail.path}.${this.character.thumbnail.extension}`
         : 'https://via.placeholder.com/300x450/ed1d24/ffffff?text=No+Image';
 
-    return html`
-      <div class="detail-container">
-        <div class="hero-section">
-          <div class="hero-content">
-            <h1 class="hero-name">${this.character.name}</h1>
-            <p class="hero-subtitle">Superhéroe del Universo Marvel</p>
-          </div>
-        </div>
+    const comics = this.character.comics?.items || [];
 
-        <div class="content-section">
-          <div class="character-layout">
-            <div class="image-section">
+    return html`
+      <div class="character-detail-root">
+        <section class="main-detail-full">
+          <div class="main-detail-content">
+            <div class="img-col">
               <img
-                class="character-image"
+                class="character-image-large"
                 src="${imageUrl}"
                 alt="${this.character.name}"
               />
             </div>
-
-            <div class="info-section">
-              <div>
-                <h2
-                  style="font-size: 1.5rem; color: #1f2937; margin-bottom: 1rem; font-weight: 700;"
-                >
-                  Biografía
-                </h2>
-                <p class="description">
-                  ${this.character.description ||
-                  'Este personaje no tiene descripción disponible en este momento.'}
-                </p>
-              </div>
-
-              <div class="stats-section">
-                <h3 class="stats-title">Estadísticas</h3>
-                <div class="stats-grid">
-                  <div class="stat-card">
-                    <span class="stat-number"
-                      >${this.character.comics?.available || 0}</span
-                    >
-                    <span class="stat-label">Comics</span>
-                  </div>
-                  <div class="stat-card">
-                    <span class="stat-number"
-                      >${this.character.series?.available || 0}</span
-                    >
-                    <span class="stat-label">Series</span>
-                  </div>
-                  <div class="stat-card">
-                    <span class="stat-number"
-                      >${this.character.stories?.available || 0}</span
-                    >
-                    <span class="stat-label">Historias</span>
-                  </div>
-                </div>
-              </div>
+            <div class="info-col">
+              <h1 class="character-name">${this.character.name}</h1>
+              <p class="character-description">
+                ${this.character.description ||
+                'Este personaje no tiene descripción disponible en este momento.'}
+              </p>
+            </div>
+            <div class="favorite-section">
+              <favorite-button
+                .characterId=${this.character.id}
+                size="large"
+                @favorite-toggled=${this._handleFavoriteToggled}
+              ></favorite-button>
             </div>
           </div>
-
-          <div class="actions-section">
-            <button class="back-button" @click=${this._handleBackClick}>
-              ← Volver a la Lista
-            </button>
+        </section>
+        <section class="comics-section">
+          <h2 class="comics-title">COMICS</h2>
+          <div class="comics-list">
+            ${comics.map(
+              (comic, idx) => html`
+                <div class="comic-card">
+                  <img
+                    class="comic-cover"
+                    src="${comic.thumbnail}"
+                    alt="Comic cover"
+                  />
+                  <div class="comic-info">
+                    <div class="comic-title">
+                      ${comic.name || 'Comic #' + (idx + 1)}
+                    </div>
+                    <div class="comic-year">${comic.year || ''}</div>
+                  </div>
+                </div>
+              `
+            )}
           </div>
-        </div>
+        </section>
       </div>
     `;
   }

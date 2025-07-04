@@ -9,7 +9,64 @@ export const mockCharacters = [
       path: 'https://i.annihil.us/u/prod/marvel/i/mg/3/50/526548a343e4b',
       extension: 'jpg',
     },
-    comics: { available: 150 },
+    comics: {
+      available: 150,
+      items: [
+        {
+          name: 'The Amazing Spider-Man #1',
+          year: 1963,
+          thumbnail: 'https://m.media-amazon.com/images/I/81p5p1QK2GL.jpg',
+        },
+        {
+          name: 'Ultimate Spider-Man #1',
+          year: 2000,
+          thumbnail: 'https://m.media-amazon.com/images/I/91Q5d6yQKGL.jpg',
+        },
+        {
+          name: 'Spider-Man: Blue',
+          year: 2002,
+          thumbnail: 'https://m.media-amazon.com/images/I/81n1QwQK2GL.jpg',
+        },
+        {
+          name: 'Spider-Verse',
+          year: 2014,
+          thumbnail:
+            'https://m.media-amazon.com/images/I/91Q5d6yQKGL._AC_SY679_.jpg',
+        },
+        {
+          name: 'The Superior Spider-Man',
+          year: 2013,
+          thumbnail:
+            'https://m.media-amazon.com/images/I/81n1QwQK2GL._AC_SY679_.jpg',
+        },
+        {
+          name: "Spider-Man: Kraven's Last Hunt",
+          year: 1987,
+          thumbnail: 'https://m.media-amazon.com/images/I/81Q5d6yQKGL.jpg',
+        },
+        {
+          name: 'Spider-Man: The Clone Saga',
+          year: 1994,
+          thumbnail:
+            'https://m.media-amazon.com/images/I/91Q5d6yQKGL._AC_SY679_.jpg',
+        },
+        {
+          name: 'Spider-Man: Maximum Carnage',
+          year: 1993,
+          thumbnail: 'https://m.media-amazon.com/images/I/81n1QwQK2GL.jpg',
+        },
+        {
+          name: 'Spider-Man: Back in Black',
+          year: 2007,
+          thumbnail: 'https://m.media-amazon.com/images/I/81p5p1QK2GL.jpg',
+        },
+        {
+          name: 'Spider-Geddon',
+          year: 2018,
+          thumbnail: 'https://m.media-amazon.com/images/I/91Q5d6yQKGL.jpg',
+        },
+      ],
+    },
     series: { available: 25 },
     stories: { available: 300 },
     events: { available: 10 },
@@ -23,7 +80,38 @@ export const mockCharacters = [
       path: 'https://i.annihil.us/u/prod/marvel/i/mg/9/c0/527bb7b37ff55',
       extension: 'jpg',
     },
-    comics: { available: 200 },
+    comics: {
+      available: 200,
+      items: [
+        {
+          name: 'Tales of Suspense #39',
+          year: 1963,
+          thumbnail: 'https://m.media-amazon.com/images/I/81Q5d6yQKGL.jpg',
+        },
+        {
+          name: 'Iron Man #1',
+          year: 1968,
+          thumbnail: 'https://m.media-amazon.com/images/I/81n1QwQK2GL.jpg',
+        },
+        {
+          name: 'Iron Man: Extremis',
+          year: 2005,
+          thumbnail:
+            'https://m.media-amazon.com/images/I/91Q5d6yQKGL._AC_SY679_.jpg',
+        },
+        {
+          name: 'Iron Man: Demon in a Bottle',
+          year: 1979,
+          thumbnail: 'https://m.media-amazon.com/images/I/81p5p1QK2GL.jpg',
+        },
+        {
+          name: 'The Invincible Iron Man',
+          year: 2008,
+          thumbnail:
+            'https://m.media-amazon.com/images/I/81n1QwQK2GL._AC_SY679_.jpg',
+        },
+      ],
+    },
     series: { available: 30 },
     stories: { available: 400 },
     events: { available: 15 },
@@ -37,7 +125,38 @@ export const mockCharacters = [
       path: 'https://i.annihil.us/u/prod/marvel/i/mg/3/50/537ba56d31087',
       extension: 'jpg',
     },
-    comics: { available: 180 },
+    comics: {
+      available: 180,
+      items: [
+        {
+          name: 'Captain America Comics #1',
+          year: 1941,
+          thumbnail: 'https://m.media-amazon.com/images/I/81Q5d6yQKGL.jpg',
+        },
+        {
+          name: 'The Death of Captain America',
+          year: 2007,
+          thumbnail: 'https://m.media-amazon.com/images/I/81n1QwQK2GL.jpg',
+        },
+        {
+          name: 'Captain America: Winter Soldier',
+          year: 2005,
+          thumbnail:
+            'https://m.media-amazon.com/images/I/91Q5d6yQKGL._AC_SY679_.jpg',
+        },
+        {
+          name: 'Captain America: Reborn',
+          year: 2009,
+          thumbnail: 'https://m.media-amazon.com/images/I/81p5p1QK2GL.jpg',
+        },
+        {
+          name: 'Captain America: Man Out of Time',
+          year: 2011,
+          thumbnail:
+            'https://m.media-amazon.com/images/I/81n1QwQK2GL._AC_SY679_.jpg',
+        },
+      ],
+    },
     series: { available: 28 },
     stories: { available: 350 },
     events: { available: 12 },
@@ -51,7 +170,37 @@ export const mockCharacters = [
       path: 'https://i.annihil.us/u/prod/marvel/i/mg/5/a0/537bc7036ab02',
       extension: 'jpg',
     },
-    comics: { available: 220 },
+    comics: {
+      available: 220,
+      items: [
+        {
+          name: 'Journey into Mystery #83',
+          year: 1962,
+          thumbnail: 'https://m.media-amazon.com/images/I/81Q5d6yQKGL.jpg',
+        },
+        {
+          name: 'Thor: God of Thunder',
+          year: 2012,
+          thumbnail:
+            'https://m.media-amazon.com/images/I/91Q5d6yQKGL._AC_SY679_.jpg',
+        },
+        {
+          name: 'The Mighty Thor #1',
+          year: 2015,
+          thumbnail: 'https://m.media-amazon.com/images/I/81n1QwQK2GL.jpg',
+        },
+        {
+          name: 'Thor: Ragnarok',
+          year: 2017,
+          thumbnail: 'https://m.media-amazon.com/images/I/81p5p1QK2GL.jpg',
+        },
+        {
+          name: 'Thor: The Dark World Prelude',
+          year: 2013,
+          thumbnail: 'https://m.media-amazon.com/images/I/91Q5d6yQKGL.jpg',
+        },
+      ],
+    },
     series: { available: 35 },
     stories: { available: 450 },
     events: { available: 18 },
@@ -65,7 +214,37 @@ export const mockCharacters = [
       path: 'https://i.annihil.us/u/prod/marvel/i/mg/f/30/50fecad1f395b',
       extension: 'jpg',
     },
-    comics: { available: 120 },
+    comics: {
+      available: 120,
+      items: [
+        {
+          name: 'The Amazing Spider-Man #86',
+          year: 1970,
+          thumbnail: 'https://m.media-amazon.com/images/I/81Q5d6yQKGL.jpg',
+        },
+        {
+          name: 'Black Widow: The Name of the Rose',
+          year: 2010,
+          thumbnail: 'https://m.media-amazon.com/images/I/81n1QwQK2GL.jpg',
+        },
+        {
+          name: 'Black Widow: Deadly Origin',
+          year: 2010,
+          thumbnail:
+            'https://m.media-amazon.com/images/I/91Q5d6yQKGL._AC_SY679_.jpg',
+        },
+        {
+          name: 'Black Widow (2020) #1',
+          year: 2020,
+          thumbnail: 'https://m.media-amazon.com/images/I/81p5p1QK2GL.jpg',
+        },
+        {
+          name: 'Black Widow: Homecoming',
+          year: 2004,
+          thumbnail: 'https://m.media-amazon.com/images/I/91Q5d6yQKGL.jpg',
+        },
+      ],
+    },
     series: { available: 20 },
     stories: { available: 250 },
     events: { available: 8 },
@@ -79,7 +258,37 @@ export const mockCharacters = [
       path: 'https://i.annihil.us/u/prod/marvel/i/mg/5/a0/538615ca33ab0',
       extension: 'jpg',
     },
-    comics: { available: 160 },
+    comics: {
+      available: 160,
+      items: [
+        {
+          name: 'The Incredible Hulk #1',
+          year: 1962,
+          thumbnail: 'https://m.media-amazon.com/images/I/81Q5d6yQKGL.jpg',
+        },
+        {
+          name: 'Planet Hulk',
+          year: 2006,
+          thumbnail:
+            'https://m.media-amazon.com/images/I/91Q5d6yQKGL._AC_SY679_.jpg',
+        },
+        {
+          name: 'World War Hulk',
+          year: 2007,
+          thumbnail: 'https://m.media-amazon.com/images/I/81n1QwQK2GL.jpg',
+        },
+        {
+          name: 'Hulk: Gray',
+          year: 2003,
+          thumbnail: 'https://m.media-amazon.com/images/I/81p5p1QK2GL.jpg',
+        },
+        {
+          name: 'The Immortal Hulk',
+          year: 2018,
+          thumbnail: 'https://m.media-amazon.com/images/I/91Q5d6yQKGL.jpg',
+        },
+      ],
+    },
     series: { available: 22 },
     stories: { available: 320 },
     events: { available: 11 },
@@ -93,7 +302,37 @@ export const mockCharacters = [
       path: 'https://i.annihil.us/u/prod/marvel/i/mg/6/60/5261a80a67e7d',
       extension: 'jpg',
     },
-    comics: { available: 90 },
+    comics: {
+      available: 90,
+      items: [
+        {
+          name: 'Fantastic Four #52',
+          year: 1966,
+          thumbnail: 'https://m.media-amazon.com/images/I/81Q5d6yQKGL.jpg',
+        },
+        {
+          name: 'Black Panther (1998) #1',
+          year: 1998,
+          thumbnail: 'https://m.media-amazon.com/images/I/81n1QwQK2GL.jpg',
+        },
+        {
+          name: 'Black Panther: The Man Without Fear',
+          year: 2010,
+          thumbnail:
+            'https://m.media-amazon.com/images/I/91Q5d6yQKGL._AC_SY679_.jpg',
+        },
+        {
+          name: 'Black Panther (2016) #1',
+          year: 2016,
+          thumbnail: 'https://m.media-amazon.com/images/I/81p5p1QK2GL.jpg',
+        },
+        {
+          name: 'Black Panther: World of Wakanda',
+          year: 2016,
+          thumbnail: 'https://m.media-amazon.com/images/I/91Q5d6yQKGL.jpg',
+        },
+      ],
+    },
     series: { available: 15 },
     stories: { available: 180 },
     events: { available: 6 },
@@ -107,7 +346,37 @@ export const mockCharacters = [
       path: 'https://i.annihil.us/u/prod/marvel/i/mg/5/f0/5261a85a501fe',
       extension: 'jpg',
     },
-    comics: { available: 110 },
+    comics: {
+      available: 110,
+      items: [
+        {
+          name: 'Strange Tales #110',
+          year: 1963,
+          thumbnail: 'https://m.media-amazon.com/images/I/81Q5d6yQKGL.jpg',
+        },
+        {
+          name: 'Doctor Strange: The Oath',
+          year: 2006,
+          thumbnail:
+            'https://m.media-amazon.com/images/I/91Q5d6yQKGL._AC_SY679_.jpg',
+        },
+        {
+          name: 'Doctor Strange (2015) #1',
+          year: 2015,
+          thumbnail: 'https://m.media-amazon.com/images/I/81n1QwQK2GL.jpg',
+        },
+        {
+          name: 'Doctor Strange: Damnation',
+          year: 2018,
+          thumbnail: 'https://m.media-amazon.com/images/I/81p5p1QK2GL.jpg',
+        },
+        {
+          name: 'Doctor Strange: Sorcerer Supreme',
+          year: 1988,
+          thumbnail: 'https://m.media-amazon.com/images/I/91Q5d6yQKGL.jpg',
+        },
+      ],
+    },
     series: { available: 18 },
     stories: { available: 220 },
     events: { available: 9 },
@@ -121,7 +390,37 @@ export const mockCharacters = [
       path: 'https://cdn.marvel.com/content/1x/214thg_com_crd_01',
       extension: 'jpg',
     },
-    comics: { available: 170 },
+    comics: {
+      available: 170,
+      items: [
+        {
+          name: 'Fantastic Four #1',
+          year: 1961,
+          thumbnail: 'https://m.media-amazon.com/images/I/81Q5d6yQKGL.jpg',
+        },
+        {
+          name: 'Marvel Two-in-One #1',
+          year: 1974,
+          thumbnail: 'https://m.media-amazon.com/images/I/81n1QwQK2GL.jpg',
+        },
+        {
+          name: 'The Thing (1983) #1',
+          year: 1983,
+          thumbnail:
+            'https://m.media-amazon.com/images/I/91Q5d6yQKGL._AC_SY679_.jpg',
+        },
+        {
+          name: 'Fantastic Four: The End',
+          year: 2007,
+          thumbnail: 'https://m.media-amazon.com/images/I/81p5p1QK2GL.jpg',
+        },
+        {
+          name: 'The Thing (2006) #1',
+          year: 2006,
+          thumbnail: 'https://m.media-amazon.com/images/I/91Q5d6yQKGL.jpg',
+        },
+      ],
+    },
     series: { available: 24 },
     stories: { available: 260 },
     events: { available: 9 },
@@ -135,7 +434,37 @@ export const mockCharacters = [
       path: 'https://i.annihil.us/u/prod/marvel/i/mg/6/70/526547e2d90ad',
       extension: 'jpg',
     },
-    comics: { available: 95 },
+    comics: {
+      available: 95,
+      items: [
+        {
+          name: 'The Avengers #57',
+          year: 1968,
+          thumbnail: 'https://m.media-amazon.com/images/I/81Q5d6yQKGL.jpg',
+        },
+        {
+          name: 'Vision (2015) #1',
+          year: 2015,
+          thumbnail: 'https://m.media-amazon.com/images/I/81n1QwQK2GL.jpg',
+        },
+        {
+          name: 'Avengers: Vision and the Scarlet Witch',
+          year: 1982,
+          thumbnail:
+            'https://m.media-amazon.com/images/I/91Q5d6yQKGL._AC_SY679_.jpg',
+        },
+        {
+          name: 'Vision: Little Worse Than A Man',
+          year: 2016,
+          thumbnail: 'https://m.media-amazon.com/images/I/81p5p1QK2GL.jpg',
+        },
+        {
+          name: 'Avengers: No Road Home',
+          year: 2019,
+          thumbnail: 'https://m.media-amazon.com/images/I/91Q5d6yQKGL.jpg',
+        },
+      ],
+    },
     series: { available: 14 },
     stories: { available: 160 },
     events: { available: 5 },
@@ -149,7 +478,37 @@ export const mockCharacters = [
       path: 'https://i.annihil.us/u/prod/marvel/i/mg/9/03/537ba26276348',
       extension: 'jpg',
     },
-    comics: { available: 105 },
+    comics: {
+      available: 105,
+      items: [
+        {
+          name: 'Tales of Suspense #57',
+          year: 1964,
+          thumbnail: 'https://m.media-amazon.com/images/I/81Q5d6yQKGL.jpg',
+        },
+        {
+          name: 'Hawkeye (2012) #1',
+          year: 2012,
+          thumbnail: 'https://m.media-amazon.com/images/I/81n1QwQK2GL.jpg',
+        },
+        {
+          name: 'Hawkeye: My Life as a Weapon',
+          year: 2013,
+          thumbnail:
+            'https://m.media-amazon.com/images/I/91Q5d6yQKGL._AC_SY679_.jpg',
+        },
+        {
+          name: 'Hawkeye: Freefall',
+          year: 2020,
+          thumbnail: 'https://m.media-amazon.com/images/I/81p5p1QK2GL.jpg',
+        },
+        {
+          name: 'Hawkeye (1983) #1',
+          year: 1983,
+          thumbnail: 'https://m.media-amazon.com/images/I/91Q5d6yQKGL.jpg',
+        },
+      ],
+    },
     series: { available: 16 },
     stories: { available: 170 },
     events: { available: 6 },
@@ -163,7 +522,37 @@ export const mockCharacters = [
       path: 'https://cdn.marvel.com/content/1x/008cmv_ons_crd_05',
       extension: 'jpg',
     },
-    comics: { available: 140 },
+    comics: {
+      available: 140,
+      items: [
+        {
+          name: 'Ms. Marvel #1',
+          year: 1977,
+          thumbnail: 'https://m.media-amazon.com/images/I/81Q5d6yQKGL.jpg',
+        },
+        {
+          name: 'Captain Marvel (2012) #1',
+          year: 2012,
+          thumbnail: 'https://m.media-amazon.com/images/I/81n1QwQK2GL.jpg',
+        },
+        {
+          name: 'The Life of Captain Marvel',
+          year: 2018,
+          thumbnail:
+            'https://m.media-amazon.com/images/I/91Q5d6yQKGL._AC_SY679_.jpg',
+        },
+        {
+          name: 'Captain Marvel: Higher, Further, Faster, More',
+          year: 2014,
+          thumbnail: 'https://m.media-amazon.com/images/I/81p5p1QK2GL.jpg',
+        },
+        {
+          name: 'Captain Marvel (2019) #1',
+          year: 2019,
+          thumbnail: 'https://m.media-amazon.com/images/I/91Q5d6yQKGL.jpg',
+        },
+      ],
+    },
     series: { available: 21 },
     stories: { available: 230 },
     events: { available: 8 },
@@ -177,7 +566,37 @@ export const mockCharacters = [
       path: 'https://cdn.marvel.com/content/1x/010ant_ons_crd_05',
       extension: 'jpg',
     },
-    comics: { available: 85 },
+    comics: {
+      available: 85,
+      items: [
+        {
+          name: 'Marvel Premiere #47',
+          year: 1979,
+          thumbnail: 'https://m.media-amazon.com/images/I/81Q5d6yQKGL.jpg',
+        },
+        {
+          name: 'Ant-Man (2015) #1',
+          year: 2015,
+          thumbnail: 'https://m.media-amazon.com/images/I/81n1QwQK2GL.jpg',
+        },
+        {
+          name: 'Ant-Man: Second-Chance Man',
+          year: 2015,
+          thumbnail:
+            'https://m.media-amazon.com/images/I/91Q5d6yQKGL._AC_SY679_.jpg',
+        },
+        {
+          name: 'Ant-Man and the Wasp',
+          year: 2018,
+          thumbnail: 'https://m.media-amazon.com/images/I/81p5p1QK2GL.jpg',
+        },
+        {
+          name: 'The Astonishing Ant-Man',
+          year: 2015,
+          thumbnail: 'https://m.media-amazon.com/images/I/91Q5d6yQKGL.jpg',
+        },
+      ],
+    },
     series: { available: 12 },
     stories: { available: 140 },
     events: { available: 4 },
@@ -191,7 +610,37 @@ export const mockCharacters = [
       path: 'https://cdn.marvel.com/content/1x/034wlv_com_crd_01',
       extension: 'jpg',
     },
-    comics: { available: 210 },
+    comics: {
+      available: 210,
+      items: [
+        {
+          name: 'The Incredible Hulk #181',
+          year: 1974,
+          thumbnail: 'https://m.media-amazon.com/images/I/81Q5d6yQKGL.jpg',
+        },
+        {
+          name: 'Wolverine (1982) #1',
+          year: 1982,
+          thumbnail: 'https://m.media-amazon.com/images/I/81n1QwQK2GL.jpg',
+        },
+        {
+          name: 'Wolverine: Old Man Logan',
+          year: 2008,
+          thumbnail:
+            'https://m.media-amazon.com/images/I/91Q5d6yQKGL._AC_SY679_.jpg',
+        },
+        {
+          name: 'Wolverine: Weapon X',
+          year: 1991,
+          thumbnail: 'https://m.media-amazon.com/images/I/81p5p1QK2GL.jpg',
+        },
+        {
+          name: 'Wolverine (2010) #1',
+          year: 2010,
+          thumbnail: 'https://m.media-amazon.com/images/I/91Q5d6yQKGL.jpg',
+        },
+      ],
+    },
     series: { available: 32 },
     stories: { available: 410 },
     events: { available: 13 },

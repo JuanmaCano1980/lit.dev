@@ -47,10 +47,19 @@ export class MarvelApp extends LitElement {
   connectedCallback() {
     super.connectedCallback();
     window.addEventListener('storage', this._updateFavoritesCount.bind(this));
+    // Escuchar eventos de favorite-toggled desde cualquier lugar
+    this.addEventListener(
+      'favorite-toggled',
+      this._updateFavoritesCount.bind(this)
+    );
   }
   disconnectedCallback() {
     window.removeEventListener(
       'storage',
+      this._updateFavoritesCount.bind(this)
+    );
+    this.removeEventListener(
+      'favorite-toggled',
       this._updateFavoritesCount.bind(this)
     );
     super.disconnectedCallback();
@@ -58,6 +67,11 @@ export class MarvelApp extends LitElement {
 
   // Recibir evento de favoritos desde character-list
   _handleFavoritesChanged() {
+    this._updateFavoritesCount();
+  }
+
+  // Recibir evento de favoritos desde character-detail
+  _handleDetailFavoritesChanged() {
     this._updateFavoritesCount();
   }
 
@@ -70,7 +84,7 @@ export class MarvelApp extends LitElement {
         .favoritesCount=${this.favoritesCount}
       ></marvel-header>
 
-      <main class="main-content">
+      <main class="main-content${this.view === 'list' ? ' home' : ''}">
         ${this.view === 'list'
           ? html`<character-list
               @character-selected=${this._handleCharacterSelect}
@@ -79,6 +93,7 @@ export class MarvelApp extends LitElement {
           : html`<character-detail
               .character=${this.selectedCharacter}
               @back-to-list=${this._handleBackToList}
+              @favorites-changed=${this._handleDetailFavoritesChanged}
             ></character-detail>`}
       </main>
     `;
