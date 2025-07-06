@@ -46,6 +46,10 @@ class MarvelAPI {
   async getCharacter(id) {
     return this._request(`/characters/${id}`);
   }
+
+  async getCharacterComics(characterId, options = {}) {
+    return this._request(`/characters/${characterId}/comics`, options);
+  }
 }
 
 export const api = new MarvelAPI();

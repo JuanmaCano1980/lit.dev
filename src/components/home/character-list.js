@@ -1,6 +1,7 @@
+/* global console */
 import { LitElement, html } from 'lit';
 import './character-card.js';
-import { mockCharacters } from '../../data/mock-data.js';
+import { characters } from '../../services/characters.js';
 import { characterListStyle } from './character-list-style';
 
 export class CharacterList extends LitElement {
@@ -8,6 +9,7 @@ export class CharacterList extends LitElement {
     characters: { type: Array },
     loading: { type: Boolean },
     searchTerm: { type: String },
+    error: { type: String },
   };
 
   static get styles() {
@@ -19,22 +21,57 @@ export class CharacterList extends LitElement {
     this.characters = [];
     this.loading = true;
     this.searchTerm = '';
-    this._loadMockData();
+    this.error = '';
+    this._loadCharacters();
   }
 
-  async _loadMockData() {
-    setTimeout(() => {
+  async _loadCharacters() {
+    try {
+      this.loading = true;
+      this.error = '';
+
+      // Inicializar el servicio (carga desde caché o API)
+      const data = await characters.initialize();
+
+      // Procesar personajes y agregar estado de favoritos
       const favs = JSON.parse(localStorage.getItem('marvel-favorites') || '[]');
-      this.characters = mockCharacters.map((c) => ({
+      this.characters = data.characters.map((c) => ({
         ...c,
         favorite: favs.includes(c.id),
       }));
+
+      console.log(`✅ Cargados ${this.characters.length} personajes`);
+    } catch (err) {
+      console.error('❌ Error cargando personajes:', err);
+      this.error = 'Error al cargar los personajes. Intenta de nuevo.';
+    } finally {
       this.loading = false;
-    }, 500);
+    }
   }
 
-  _handleSearchChange(e) {
+  async _handleSearchChange(e) {
     this.searchTerm = e.target.value;
+
+    // Si la búsqueda está vacía, mostrar todos los personajes
+    if (!this.searchTerm.trim()) {
+      return;
+    }
+
+    // Búsqueda en tiempo real (opcional)
+    if (this.searchTerm.length >= 2) {
+      try {
+        const results = await characters.search(this.searchTerm, 20);
+        const favs = JSON.parse(
+          localStorage.getItem('marvel-favorites') || '[]'
+        );
+        this.characters = results.map((c) => ({
+          ...c,
+          favorite: favs.includes(c.id),
+        }));
+      } catch (err) {
+        console.error('Error en búsqueda:', err);
+      }
+    }
   }
 
   _handleCharacterClick(character) {
@@ -73,6 +110,18 @@ export class CharacterList extends LitElement {
     if (this.loading) {
       return html`<div class="loading">Cargando personajes...</div>`;
     }
+
+    if (this.error) {
+      return html`
+        <div class="error-container">
+          <div class="error-message">${this.error}</div>
+          <button @click=${this._loadCharacters} class="retry-button">
+            Intentar de nuevo
+          </button>
+        </div>
+      `;
+    }
+
     return html`
       <div class="search-container">
         <span class="search-icon">

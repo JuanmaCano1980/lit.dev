@@ -1,15 +1,25 @@
+/* global console */
 import { LitElement, html } from 'lit';
 import { characterDetailStyle } from './character-detail-style.js';
 import './header-character-detail.js';
 import './comics-section.js';
+import { api } from '../../services/api.js';
 
 export class CharacterDetail extends LitElement {
   static properties = {
     character: { type: Object },
+    comics: { type: Array },
+    loadingComics: { type: Boolean },
   };
 
   static get styles() {
     return [characterDetailStyle];
+  }
+
+  constructor() {
+    super();
+    this.comics = [];
+    this.loadingComics = false;
   }
 
   render() {
@@ -19,8 +29,6 @@ export class CharacterDetail extends LitElement {
         <p>Selecciona un personaje de la lista para ver sus detalles</p>
       </div>`;
     }
-
-    const comics = this.character.comics?.items || [];
 
     return html`
       <div class="character-detail-root">
@@ -34,9 +42,44 @@ export class CharacterDetail extends LitElement {
               })
             )}
         ></header-character-detail>
-        <comics-section .comics=${comics}></comics-section>
+        <comics-section
+          .comics=${this.comics}
+          .loading=${this.loadingComics}
+        ></comics-section>
       </div>
     `;
+  }
+
+  updated(changedProperties) {
+    if (changedProperties.has('character') && this.character) {
+      this._loadComicsFromAPI();
+    }
+  }
+
+  async _loadComicsFromAPI() {
+    if (!this.character?.id) return;
+
+    try {
+      this.loadingComics = true;
+      console.log('Cargando cómics desde API para:', this.character.name);
+
+      const response = await api.getCharacterComics(this.character.id, {
+        limit: 20,
+        orderBy: '-focDate', // Ordenar por fecha de enfoque (más recientes primero)
+      });
+
+      this.comics = response.data.results || [];
+      console.log('Cómics cargados desde API:', this.comics.length);
+
+      if (this.comics.length > 0) {
+        console.log('Primer cómic con imagen:', this.comics[0]);
+      }
+    } catch (error) {
+      console.error('Error cargando cómics desde API:', error);
+      this.comics = [];
+    } finally {
+      this.loadingComics = false;
+    }
   }
 }
 

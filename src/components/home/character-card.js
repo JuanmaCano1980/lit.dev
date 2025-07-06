@@ -5,10 +5,18 @@ import '../common/favorite-button.js';
 export class CharacterCard extends LitElement {
   static properties = {
     character: { type: Object },
+    imageLoaded: { type: Boolean },
+    imageError: { type: Boolean },
   };
 
   static get styles() {
     return [characterCardStyle];
+  }
+
+  constructor() {
+    super();
+    this.imageLoaded = false;
+    this.imageError = false;
   }
 
   _handleClick() {
@@ -34,18 +42,45 @@ export class CharacterCard extends LitElement {
 
   render() {
     if (!this.character) return html``;
-    const imageUrl =
-      this.character.thumbnail?.path && this.character.thumbnail?.extension
-        ? `${this.character.thumbnail.path}.${this.character.thumbnail.extension}`
-        : 'https://via.placeholder.com/300x300/ed1d24/ffffff?text=No+Image';
+
+    // Construir URL de imagen con fallback local
+    let imageUrl = '/placeholder.svg';
+
+    if (this.character.thumbnail?.path && this.character.thumbnail?.extension) {
+      const basePath = this.character.thumbnail.path;
+      const extension = this.character.thumbnail.extension;
+
+      // Verificar si es una imagen válida de Marvel
+      if (
+        basePath.includes('image_not_available') ||
+        basePath.includes('4c002e0300000') ||
+        basePath.includes('f002')
+      ) {
+        imageUrl = '/placeholder.svg';
+      } else {
+        // Usar imagen de Marvel con tamaño estándar
+        imageUrl = `${basePath}/standard_large.${extension}`;
+      }
+    }
+
     return html`
       <div class="card" @click=${this._handleClick}>
         <div class="image-container">
+          ${!this.imageLoaded
+            ? html`
+                <div class="image-loading">
+                  <div class="loading-spinner"></div>
+                </div>
+              `
+            : ''}
           <img
             class="character-image"
             src="${imageUrl}"
             alt="${this.character.name}"
             loading="lazy"
+            data-loaded="${this.imageLoaded}"
+            @error=${this._handleImageError}
+            @load=${this._handleImageLoad}
           />
         </div>
         <div class="card-footer">
@@ -60,6 +95,17 @@ export class CharacterCard extends LitElement {
         </div>
       </div>
     `;
+  }
+
+  _handleImageError(e) {
+    // Fallback a placeholder local si la imagen falla
+    this.imageError = true;
+    this.imageLoaded = true; // Para que se muestre el placeholder
+    e.target.src = '/placeholder.svg';
+  }
+
+  _handleImageLoad() {
+    this.imageLoaded = true;
   }
 }
 

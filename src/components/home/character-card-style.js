@@ -5,8 +5,11 @@ export const characterCardStyle = css`
     display: block;
     cursor: pointer;
     user-select: none;
+    width: 188px;
+    flex-shrink: 0;
   }
   .card {
+    width: 100%;
     background: transparent;
     overflow: hidden;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
@@ -24,17 +27,59 @@ export const characterCardStyle = css`
   }
   .image-container {
     width: 100%;
-    aspect-ratio: 1/1;
+    height: 188px; /* Altura fija para consistencia */
     background: #222;
     overflow: hidden;
     border-bottom: 5px solid var(--marvel-red);
+    position: relative;
   }
   .character-image {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    object-position: center top; /* Enfocar en la parte superior */
     display: block;
     transition: transform 0.35s cubic-bezier(0.4, 0.2, 0.2, 1);
+    background: #222; /* Color de fondo mientras carga */
+    opacity: 0;
+    transition:
+      opacity 0.3s ease,
+      transform 0.35s cubic-bezier(0.4, 0.2, 0.2, 1);
+  }
+
+  .character-image[data-loaded='true'] {
+    opacity: 1;
+  }
+
+  .image-loading {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #222;
+    z-index: 1;
+  }
+
+  .loading-spinner {
+    width: 30px;
+    height: 30px;
+    border: 3px solid #444;
+    border-top: 3px solid #ed1d24;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
   }
   .card:hover .character-image {
     transform: scale(1.08);
@@ -87,8 +132,8 @@ export const characterCardStyle = css`
   }
 
   @media (max-width: 600px) {
-    .card {
-      width: 100%;
+    :host {
+      width: 160px;
     }
   }
 `;

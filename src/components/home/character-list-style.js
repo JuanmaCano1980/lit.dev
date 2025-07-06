@@ -88,16 +88,16 @@ export const characterListStyle = css`
   }
   .characters-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, 188.57px);
+    grid-template-columns: repeat(auto-fill, 188px);
     gap: 1rem;
-    justify-items: start;
-    justify-content: start;
+    justify-items: center;
+    justify-content: center;
     width: 100%;
     overflow-x: auto;
   }
   @media (max-width: 600px) {
     .characters-grid {
-      grid-template-columns: repeat(auto-fill, 172.5px);
+      grid-template-columns: repeat(auto-fill, 160px);
     }
   }
   .loading,
@@ -106,6 +106,32 @@ export const characterListStyle = css`
     padding: 2rem;
     font-size: 1.1rem;
     color: #6b7280;
+  }
+
+  .error-container {
+    text-align: center;
+    padding: 2rem;
+  }
+
+  .error-message {
+    font-size: 1.1rem;
+    color: #dc2626;
+    margin-bottom: 1rem;
+  }
+
+  .retry-button {
+    background: #111;
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 4px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+
+  .retry-button:hover {
+    background: #333;
   }
   .results-count {
     margin-top: 0.5rem;
