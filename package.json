@@ -29,6 +29,7 @@
     "vite": "^7.0.0"
   },
   "dependencies": {
+    "crypto-js": "^4.2.0",
     "lit": "^3.3.0",
     "vitest": "^3.2.4"
   },

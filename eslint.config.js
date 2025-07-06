@@ -32,9 +32,14 @@ export default [
     },
     rules: {
       'prettier/prettier': 'error',
-      'no-console': 'warn',
       'no-unused-vars': 'warn',
       'no-undef': 'error',
+    },
+  },
+  {
+    files: ['src/services/**/*.js', 'src/main.js'],
+    rules: {
+      // 'no-console': 'off', // Eliminado
     },
   },
   {
