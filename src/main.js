@@ -1,2 +1,2 @@
 import './styles.css';
-import './components/marvel-app.js';
+import './components/home/marvel-app.js';
