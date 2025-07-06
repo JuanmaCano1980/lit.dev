@@ -133,13 +133,35 @@ export const characterListStyle = css`
   .retry-button:hover {
     background: #333;
   }
-  .results-count {
+  .results-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     margin-top: 0.5rem;
     margin-bottom: 1.5rem;
+  }
+
+  .results-count {
     font-size: 1.1rem;
     color: #111;
     font-weight: 400;
     letter-spacing: 0.08em;
     text-transform: uppercase;
+  }
+
+  .refresh-button {
+    background: #ed1d24;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    font-weight: 500;
+  }
+
+  .refresh-button:hover {
+    background: #c41e23;
   }
 `;

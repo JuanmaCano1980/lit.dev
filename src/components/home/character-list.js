@@ -30,7 +30,7 @@ export class CharacterList extends LitElement {
       this.loading = true;
       this.error = '';
 
-      // Inicializar el servicio (carga desde caché o API)
+      // Cargar personajes aleatorios desde API
       const data = await characters.initialize();
 
       // Procesar personajes y agregar estado de favoritos
@@ -40,7 +40,9 @@ export class CharacterList extends LitElement {
         favorite: favs.includes(c.id),
       }));
 
-      console.log(`✅ Cargados ${this.characters.length} personajes`);
+      console.log(
+        `✅ Cargados ${this.characters.length} personajes aleatorios`
+      );
     } catch (err) {
       console.error('❌ Error cargando personajes:', err);
       this.error = 'Error al cargar los personajes. Intenta de nuevo.';
@@ -148,7 +150,14 @@ export class CharacterList extends LitElement {
           aria-label="Buscar personaje"
         />
       </div>
-      <div class="results-count">${this.filteredCharacters.length} RESULTS</div>
+      <div class="results-header">
+        <div class="results-count">
+          ${this.filteredCharacters.length} RESULTS
+        </div>
+        <button @click=${this._loadCharacters} class="refresh-button">
+          🔄 Cargar más personajes
+        </button>
+      </div>
       ${this.filteredCharacters.length === 0
         ? html`<div class="no-results">No se encontraron personajes</div>`
         : html`
