@@ -1,6 +1,6 @@
 import { LitElement, html } from 'lit';
 import { characterGridStyle } from './character-grid-style.js';
-import '../home/character-card.js';
+import './character-card.js';
 
 export class CharacterGrid extends LitElement {
   static properties = {

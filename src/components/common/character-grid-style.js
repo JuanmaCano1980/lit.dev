@@ -1,5 +1,4 @@
 import { css } from 'lit';
-import { mediaQueries } from '../../utils/css-utils.js';
 
 export const characterGridStyle = css`
   .characters-grid {

@@ -1,6 +1,6 @@
 import { LitElement, html } from 'lit';
-import { characterCardStyle } from './character-card-style';
-import '../common/favorite-button.js';
+import { characterCardStyle } from './character-card-style.js';
+import './favorite-button.js';
 import {
   getMarvelImageUrl,
   handleImageError,

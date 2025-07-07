@@ -1,6 +1,5 @@
-/* global console */
 import { LitElement, html } from 'lit';
-import './character-card.js';
+import '../common/character-card.js';
 import '../common/character-grid.js';
 import '../common/marvel-spinner.js';
 import '../common/search-container.js';

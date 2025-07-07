@@ -1,5 +1,6 @@
-/* global URLSearchParams, fetch */
 import CryptoJS from 'crypto-js';
+
+/* global fetch */
 
 class MarvelAPI {
   constructor() {
