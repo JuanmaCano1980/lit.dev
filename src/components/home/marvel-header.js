@@ -29,7 +29,16 @@ export class MarvelHeader extends LitElement {
           <img src="/marvel.svg" alt="Marvel Logo" class="logo-img" />
         </div>
         <div class="header-right">
-          <span class="favorites-info">
+          <span
+            class="favorites-info"
+            @click=${() =>
+              this.dispatchEvent(
+                new CustomEvent('show-favorites', {
+                  bubbles: true,
+                  composed: true,
+                })
+              )}
+          >
             <img src="/heart_on.svg" alt="favorites" class="favorites-heart" />
             <span class="favorites-count">${this.favoritesCount || 0}</span>
           </span>

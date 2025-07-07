@@ -1,6 +1,7 @@
 /* global console */
 import { LitElement, html } from 'lit';
 import { comicsSectionStyle } from './comics-section-style.js';
+import '../common/marvel-spinner.js';
 
 export class ComicsSection extends LitElement {
   static properties = {
@@ -23,12 +24,7 @@ export class ComicsSection extends LitElement {
       return html`
         <section class="comics-section">
           <h2 class="comics-title">COMICS</h2>
-          <div style="text-align: center; padding: 2rem;">
-            <div
-              style="width: 30px; height: 30px; border: 3px solid #444; border-top: 3px solid #ed1d24; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto;"
-            ></div>
-            <p style="color: #888; margin-top: 1rem;">Cargando cómics...</p>
-          </div>
+          <marvel-spinner></marvel-spinner>
         </section>
       `;
     }

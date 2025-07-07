@@ -1,6 +1,8 @@
 /* global console */
 import { LitElement, html } from 'lit';
 import './character-card.js';
+import '../common/character-grid.js';
+import '../common/marvel-spinner.js';
 import { characters } from '../../services/characters.js';
 import { characterListStyle } from './character-list-style';
 
@@ -10,6 +12,7 @@ export class CharacterList extends LitElement {
     loading: { type: Boolean },
     searchTerm: { type: String },
     error: { type: String },
+    resetSearchFlag: { type: Boolean },
   };
 
   static get styles() {
@@ -22,7 +25,9 @@ export class CharacterList extends LitElement {
     this.loading = true;
     this.searchTerm = '';
     this.error = '';
+    this._debounceTimeout = null;
     this._loadCharacters();
+    this.addEventListener('go-home', this._handleGoHome.bind(this));
   }
 
   async _loadCharacters() {
@@ -59,20 +64,28 @@ export class CharacterList extends LitElement {
       return;
     }
 
-    // Búsqueda en tiempo real (opcional)
-    if (this.searchTerm.length >= 2) {
-      try {
-        const results = await characters.search(this.searchTerm, 20);
-        const favs = JSON.parse(
-          localStorage.getItem('marvel-favorites') || '[]'
-        );
-        this.characters = results.map((c) => ({
-          ...c,
-          favorite: favs.includes(c.id),
-        }));
-      } catch (err) {
-        console.error('Error en búsqueda:', err);
-      }
+    // Solo buscar si la cadena tiene 3 caracteres o más, con debounce
+    if (this._debounceTimeout) {
+      window.clearTimeout(this._debounceTimeout);
+    }
+    if (this.searchTerm.length >= 3) {
+      this._debounceTimeout = window.setTimeout(async () => {
+        this.loading = true;
+        try {
+          const results = await characters.search(this.searchTerm, 20);
+          const favs = JSON.parse(
+            localStorage.getItem('marvel-favorites') || '[]'
+          );
+          this.characters = results.map((c) => ({
+            ...c,
+            favorite: favs.includes(c.id),
+          }));
+          this.loading = false;
+        } catch (err) {
+          console.error('Error en búsqueda:', err);
+          this.loading = false;
+        }
+      }, 400);
     }
   }
 
@@ -85,16 +98,9 @@ export class CharacterList extends LitElement {
   }
 
   _handleToggleFavorite(e) {
-    const character = e.detail;
-    this.characters = this.characters.map((c) =>
-      c.id === character.id ? { ...c, favorite: !c.favorite } : c
-    );
-    // Persistir favoritos
-    const favIds = this.characters.filter((c) => c.favorite).map((c) => c.id);
-    localStorage.setItem('marvel-favorites', JSON.stringify(favIds));
-    // Emitir evento para actualizar el header
     this.dispatchEvent(
-      new CustomEvent('favorites-changed', {
+      new CustomEvent('favorite-toggled', {
+        detail: e.detail,
         bubbles: true,
         composed: true,
       })
@@ -108,11 +114,22 @@ export class CharacterList extends LitElement {
     );
   }
 
-  render() {
-    if (this.loading) {
-      return html`<div class="loading">Cargando personajes...</div>`;
-    }
+  _handleGoHome() {
+    this.searchTerm = '';
+    this.characters = [];
+    this._loadCharacters();
+    this.requestUpdate();
+  }
 
+  updated(changedProps) {
+    if (changedProps.has('resetSearchFlag')) {
+      this.searchTerm = '';
+      this.characters = [];
+      this._loadCharacters();
+    }
+  }
+
+  render() {
     if (this.error) {
       return html`
         <div class="error-container">
@@ -154,26 +171,21 @@ export class CharacterList extends LitElement {
         <div class="results-count">
           ${this.filteredCharacters.length} RESULTS
         </div>
-        <button @click=${this._loadCharacters} class="refresh-button">
-          🔄 Cargar más personajes
-        </button>
       </div>
-      ${this.filteredCharacters.length === 0
-        ? html`<div class="no-results">No se encontraron personajes</div>`
-        : html`
-            <div class="characters-grid">
-              ${this.filteredCharacters.map(
-                (character) => html`
-                  <character-card
-                    .character=${character}
-                    @character-click=${() =>
-                      this._handleCharacterClick(character)}
-                    @toggle-favorite=${this._handleToggleFavorite}
-                  ></character-card>
-                `
-              )}
-            </div>
-          `}
+      <div class="results-content">
+        ${this.loading
+          ? html`<marvel-spinner></marvel-spinner>`
+          : this.filteredCharacters.length === 0
+            ? html`<div class="no-results">No se encontraron personajes</div>`
+            : html`
+                <character-grid
+                  .characters=${this.filteredCharacters}
+                  @character-click=${(e) =>
+                    this._handleCharacterClick(e.detail)}
+                  @toggle-favorite=${this._handleToggleFavorite}
+                ></character-grid>
+              `}
+      </div>
     `;
   }
 }

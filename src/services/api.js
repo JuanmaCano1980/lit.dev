@@ -40,7 +40,7 @@ class MarvelAPI {
   }
 
   async searchCharacters(name, options = {}) {
-    return this._request('/characters', { name, ...options });
+    return this._request('/characters', { nameStartsWith: name, ...options });
   }
 
   async getCharacter(id) {

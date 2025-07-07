@@ -29,7 +29,7 @@ export class HeaderCharacterDetail extends LitElement {
     const imageUrl =
       this.character.thumbnail?.path && this.character.thumbnail?.extension
         ? `${this.character.thumbnail.path}.${this.character.thumbnail.extension}`
-        : 'https://via.placeholder.com/300x450/ed1d24/ffffff?text=No+Image';
+        : '/placeholder.svg';
 
     return html`
       <section class="main-detail-full">
@@ -42,18 +42,21 @@ export class HeaderCharacterDetail extends LitElement {
             />
           </div>
           <div class="info-col">
-            <h1 class="character-name">${this.character.name}</h1>
+            <div class="character-name-row">
+              <h1 class="character-name">${this.character.name}</h1>
+              <div class="favorite-section">
+                <favorite-button
+                  .characterId=${this.character.id}
+                  .character=${this.character}
+                  size="large"
+                  @favorite-toggled=${this._handleFavoriteToggled}
+                ></favorite-button>
+              </div>
+            </div>
             <p class="character-description">
               ${this.character.description ||
               'Este personaje no tiene descripción disponible en este momento.'}
             </p>
-          </div>
-          <div class="favorite-section">
-            <favorite-button
-              .characterId=${this.character.id}
-              size="large"
-              @favorite-toggled=${this._handleFavoriteToggled}
-            ></favorite-button>
           </div>
         </div>
       </section>

@@ -89,6 +89,7 @@ export class CharacterCard extends LitElement {
           >
           <favorite-button
             .characterId=${this.character.id}
+            .character=${this.character}
             size="medium"
             @favorite-toggled=${this._handleFavoriteToggled}
           ></favorite-button>

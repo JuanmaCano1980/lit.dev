@@ -9,6 +9,8 @@ export class MarvelApp extends LitElement {
     selectedCharacter: { type: Object },
     view: { type: String },
     favoritesCount: { type: Number },
+    favorites: { type: Array },
+    resetSearchFlag: { type: Boolean },
   };
 
   static get styles() {
@@ -18,14 +20,40 @@ export class MarvelApp extends LitElement {
   constructor() {
     super();
     this.selectedCharacter = null;
-    this.view = 'list'; // 'list' o 'detail'
+    this.view = 'list'; // 'list', 'detail' o 'favorites'
     this.favoritesCount = 0;
+    this.favorites = [];
+    this.resetSearchFlag = false;
+    this._loadFavorites();
     this._updateFavoritesCount();
+  }
+
+  _loadFavorites() {
+    this.favorites = JSON.parse(
+      localStorage.getItem('marvel-favorites') || '[]'
+    );
   }
 
   _updateFavoritesCount() {
     const favs = JSON.parse(localStorage.getItem('marvel-favorites') || '[]');
     this.favoritesCount = favs.length;
+  }
+
+  _handleFavoriteToggled(e) {
+    const { character, isFavorite } = e.detail;
+    let favs = JSON.parse(localStorage.getItem('marvel-favorites') || '[]');
+    if (isFavorite) {
+      // Añadir solo si no existe
+      if (!favs.some((c) => c.id === character.id)) {
+        favs.push(character);
+      }
+    } else {
+      favs = favs.filter((c) => c.id !== character.id);
+    }
+    localStorage.setItem('marvel-favorites', JSON.stringify(favs));
+    this._loadFavorites();
+    this._updateFavoritesCount();
+    this.requestUpdate();
   }
 
   _handleCharacterSelect(e) {
@@ -41,6 +69,19 @@ export class MarvelApp extends LitElement {
   _handleGoHome() {
     this.view = 'list';
     this.selectedCharacter = null;
+    this.resetSearchFlag = !this.resetSearchFlag;
+    // Limpiar búsqueda y recargar personajes en character-list
+    const characterList = this.renderRoot?.querySelector('character-list');
+    if (characterList && typeof characterList._handleGoHome === 'function') {
+      characterList._handleGoHome();
+    }
+  }
+
+  _handleShowFavorites() {
+    this.favorites = JSON.parse(
+      localStorage.getItem('marvel-favorites') || '[]'
+    );
+    this.view = 'favorites';
   }
 
   // Escuchar cambios en favoritos
@@ -80,8 +121,9 @@ export class MarvelApp extends LitElement {
       <marvel-header
         @back-to-list=${this._handleBackToList}
         @go-home=${this._handleGoHome}
-        .view=${this.view}
+        @show-favorites=${this._handleShowFavorites}
         .favoritesCount=${this.favoritesCount}
+        .view=${this.view}
       ></marvel-header>
 
       <main class="main-content${this.view === 'list' ? ' home' : ''}">
@@ -89,12 +131,32 @@ export class MarvelApp extends LitElement {
           ? html`<character-list
               @character-selected=${this._handleCharacterSelect}
               @favorites-changed=${this._handleFavoritesChanged}
+              @favorite-toggled=${this._handleFavoriteToggled}
+              .resetSearchFlag=${this.resetSearchFlag}
             ></character-list>`
-          : html`<character-detail
-              .character=${this.selectedCharacter}
-              @back-to-list=${this._handleBackToList}
-              @favorites-changed=${this._handleDetailFavoritesChanged}
-            ></character-detail>`}
+          : this.view === 'favorites'
+            ? html`
+                <div class="favorites-list-container">
+                  <h2>Favoritos</h2>
+                  ${this.favorites.length === 0
+                    ? html`<div>No tienes personajes favoritos.</div>`
+                    : html`
+                        <character-grid
+                          .characters=${this.favorites}
+                          @character-click=${(e) =>
+                            (this.selectedCharacter = e.detail)}
+                          @toggle-favorite=${this._handleFavoriteToggled}
+                        ></character-grid>
+                      `}
+                  <button @click=${this._handleBackToList}>Volver</button>
+                </div>
+              `
+            : html`<character-detail
+                .character=${this.selectedCharacter}
+                @back-to-list=${this._handleBackToList}
+                @favorites-changed=${this._handleDetailFavoritesChanged}
+                @favorite-toggled=${this._handleFavoriteToggled}
+              ></character-detail>`}
       </main>
     `;
   }

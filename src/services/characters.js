@@ -1,12 +1,8 @@
-/* global console */
 import { api } from './api.js';
 
 class CharactersService {
   async initialize() {
-    console.log('🌐 Cargando personajes desde API...');
-
-    // Obtener personajes con offset aleatorio
-    const offset = Math.floor(Math.random() * 1000);
+    const offset = 0;
     const response = await api.getCharacters({
       limit: 50,
       offset: offset,
@@ -21,9 +17,6 @@ class CharactersService {
       },
     };
 
-    console.log(
-      `✅ Cargados ${data.characters.length} personajes (offset: ${offset})`
-    );
     return data;
   }
 
@@ -32,7 +25,6 @@ class CharactersService {
   }
 
   async search(query, limit = 20) {
-    console.log(`🔍 Buscando: "${query}"`);
     const response = await api.searchCharacters(query, { limit });
     return response.data.results;
   }

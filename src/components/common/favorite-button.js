@@ -3,6 +3,7 @@ import { favoriteButtonStyle } from './favorite-button-style.js';
 
 export class FavoriteButton extends LitElement {
   static properties = {
+    character: { type: Object },
     characterId: { type: Number },
     isFavorite: { type: Boolean },
     size: { type: String }, // 'small', 'medium', 'large'
@@ -66,13 +67,13 @@ export class FavoriteButton extends LitElement {
   _updateFavoriteState() {
     if (this.characterId !== null) {
       const favs = JSON.parse(localStorage.getItem('marvel-favorites') || '[]');
-      this.isFavorite = favs.includes(this.characterId);
+      this.isFavorite = favs.some((c) => c.id === this.characterId);
     }
   }
 
   _toggleFavorite(e) {
     e.stopPropagation();
-    if (this.characterId === null) return;
+    if (this.characterId === null || !this.character) return;
 
     // Animación de pop
     const icon = e.currentTarget.querySelector('.favorite-icon');
@@ -89,24 +90,13 @@ export class FavoriteButton extends LitElement {
       );
     }
 
-    // Actualizar localStorage
-    let favs = JSON.parse(localStorage.getItem('marvel-favorites') || '[]');
-    if (this.isFavorite) {
-      favs = favs.filter((id) => id !== this.characterId);
-    } else {
-      favs.push(this.characterId);
-    }
-    localStorage.setItem('marvel-favorites', JSON.stringify(favs));
-
-    // Actualizar estado
-    this.isFavorite = !this.isFavorite;
-
-    // Emitir evento
+    // Solo emitir evento, no modificar localStorage
     this.dispatchEvent(
       new CustomEvent('favorite-toggled', {
         detail: {
           characterId: this.characterId,
-          isFavorite: this.isFavorite,
+          isFavorite: !this.isFavorite,
+          character: this.character,
         },
         bubbles: true,
         composed: true,
