@@ -1,20 +1,20 @@
 import { css } from 'lit';
 
-// Breakpoints como valores fijos para usar en Shadow DOM
+// Breakpoints as fixed values to use in Shadow DOM
 export const breakpoints = {
   tablet: 834,
   desktop: 1024,
   wide: 1200,
 };
 
-// Función helper para crear media queries
+// Helper function to create media queries
 export const mq = (breakpoint) => (styles) => css`
   @media (min-width: ${breakpoints[breakpoint]}px) {
     ${styles}
   }
 `;
 
-// Media queries predefinidas
+// Predefined media queries
 export const mediaQueries = {
   tablet: mq('tablet'),
   desktop: mq('desktop'),

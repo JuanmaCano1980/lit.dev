@@ -24,13 +24,11 @@ class CharactersService {
   }
 
   async initialize() {
-    // Verificar si tenemos un cache válido
+    // Verify if we have a valid cache
     if (this._isCacheValid()) {
-      console.log('📦 Usando cache para personajes');
       return this._charactersCache;
     }
 
-    console.log('🔄 Cache expirado o no existe, cargando desde API');
     const offset = 0;
     const response = await api.getCharacters({
       limit: API_CONFIG.DEFAULT_LIMIT,
@@ -46,7 +44,7 @@ class CharactersService {
       },
     };
 
-    // Guardar en cache
+    // Save to cache
     this._charactersCache = data;
     this._cacheTimestamp = Date.now();
 
@@ -62,12 +60,10 @@ class CharactersService {
     return response.data.results;
   }
 
-  // Método para limpiar cache manualmente (útil para testing o cuando se necesite)
   clearCache() {
     this._clearCache();
   }
 
-  // Método para obtener información del cache (útil para debugging)
   getCacheInfo() {
     if (!this._charactersCache || !this._cacheTimestamp) {
       return { hasCache: false };

@@ -34,7 +34,7 @@ export class CharacterCard extends LitElement {
   }
 
   _handleFavoriteToggled(e) {
-    // Emitir el evento para que character-list lo maneje
+    // Emit event to character-list to handle it
     this.dispatchEvent(
       new CustomEvent('toggle-favorite', {
         detail: e.detail,

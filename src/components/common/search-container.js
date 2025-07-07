@@ -2,10 +2,11 @@ import { LitElement, html } from 'lit';
 import { searchContainerStyle } from './search-container-style.js';
 import { SEARCH_CONFIG } from '../../constants/app-constants.js';
 
-/* global clearTimeout */
+// Global function declarations for browser APIs
+const { clearTimeout, setTimeout } = globalThis;
 
 export class SearchContainer extends LitElement {
-  // Configuración de búsqueda
+  // Search configuration
   static properties = {
     searchTerm: { type: String },
     initialSearchTerm: { type: String },
@@ -61,7 +62,7 @@ export class SearchContainer extends LitElement {
   }
 
   updated(changedProps) {
-    // Si se pasa un término de búsqueda inicial, aplicarlo
+    // If an initial search term is passed, apply it
     if (changedProps.has('initialSearchTerm') && this.initialSearchTerm) {
       this.searchTerm = this.initialSearchTerm;
     }

@@ -31,9 +31,9 @@ export class CharacterList extends LitElement {
     this.error = '';
     this.customTitle = '';
     this.initialSearchTerm = '';
-    this._hasLoadedCharacters = false; // Bandera para evitar llamadas duplicadas
+    this._hasLoadedCharacters = false; // Flag to avoid duplicate calls
 
-    // Detectar si estamos en modo favoritos basado en la URL
+    // Detect if we are in favorites mode based on the URL
     const urlParams = new URLSearchParams(window.location.search);
     this.isFavoritesMode = urlParams.get('favorites') === 'true';
 
@@ -43,14 +43,14 @@ export class CharacterList extends LitElement {
   connectedCallback() {
     super.connectedCallback();
 
-    // Si estamos en modo favoritos y no hay personajes, cargar desde localStorage
+    // If we are in favorites mode and there are no characters, load from localStorage
     if (
       this.isFavoritesMode &&
       (!this.characters || this.characters.length === 0)
     ) {
       this._loadFavoritesFromStorage();
     }
-    // Cargar personajes si no se pasan externamente y no estamos en modo favoritos
+    // Load characters if not passed externally and not in favorites mode
     else if (
       (!this.characters || this.characters.length === 0) &&
       !this.isFavoritesMode &&
@@ -71,10 +71,10 @@ export class CharacterList extends LitElement {
       this.loading = true;
       this.error = '';
 
-      // Cargar personajes aleatorios desde API
+      // Load random characters from API
       const data = await characters.initialize();
 
-      // Procesar personajes y agregar estado de favoritos
+      // Process characters and add favorite state
       const favs = JSON.parse(
         localStorage.getItem(STORAGE_KEYS.FAVORITES) || '[]'
       );
@@ -137,7 +137,7 @@ export class CharacterList extends LitElement {
     this.characters = [];
     this.isFavoritesMode = false;
     this._hasLoadedCharacters = false; // Reset flag when going home
-    // Solo cargar personajes si no estamos en modo favoritos
+    // Load characters if not in favorites mode
     if (!this.isFavoritesMode) {
       this._loadCharacters();
     }
@@ -166,27 +166,27 @@ export class CharacterList extends LitElement {
     if (changedProps.has('resetSearchFlag')) {
       this.searchTerm = '';
       this.characters = [];
-      // Solo cargar personajes si no estamos en modo favoritos y no se han cargado ya
+      // Load characters if not in favorites mode and not already loaded
       if (!this.isFavoritesMode && !this._hasLoadedCharacters) {
         this._loadCharacters();
       }
     }
 
-    // Detectar si estamos en modo favoritos basado en el customTitle
+    // Detect if we are in favorites mode based on the customTitle
     if (changedProps.has('customTitle')) {
       this.isFavoritesMode = this.customTitle === 'Favorites';
-      // Si estamos en modo favoritos, detener el loading inmediatamente
+      // If we are in favorites mode, stop loading immediately
       if (this.isFavoritesMode) {
         this.loading = false;
         this.error = '';
-        // Si no hay personajes, cargar desde localStorage
+        // If there are no characters, load from localStorage
         if (!this.characters || this.characters.length === 0) {
           this._loadFavoritesFromStorage();
         }
       }
     }
 
-    // Si se pasan personajes externos (como en favoritos), detener el loading
+    // If external characters are passed (like in favorites), stop loading
     if (
       changedProps.has('characters') &&
       this.characters &&
@@ -196,10 +196,10 @@ export class CharacterList extends LitElement {
       this.error = '';
     }
 
-    // Si se pasa un término de búsqueda inicial, aplicarlo
+    // If an initial search term is passed, apply it
     if (changedProps.has('initialSearchTerm') && this.initialSearchTerm) {
       this.searchTerm = this.initialSearchTerm;
-      // Si hay suficientes caracteres, realizar la búsqueda
+      // If there are enough characters, perform the search
       if (this.initialSearchTerm.length >= SEARCH_CONFIG.MIN_LENGTH) {
         this._performSearch(this.initialSearchTerm);
       }
@@ -250,7 +250,7 @@ export class CharacterList extends LitElement {
     `;
   }
 
-  // Asegurar que characters siempre sea un array
+  // Ensure characters is always an array
   set characters(value) {
     this._characters = Array.isArray(value) ? value : [];
   }

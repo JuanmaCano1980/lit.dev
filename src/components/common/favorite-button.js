@@ -35,7 +35,7 @@ export class FavoriteButton extends LitElement {
   }
 
   _setupCardHoverDetection() {
-    // Buscar la tarjeta padre
+    // Find the parent card
     const card = this.closest('.card');
     if (card) {
       card.addEventListener('mouseenter', this._onCardHover.bind(this));
@@ -60,7 +60,7 @@ export class FavoriteButton extends LitElement {
   }
 
   _updateFavoriteState() {
-    // Solo actualizar desde localStorage si no se pasa isFavorite como prop
+    // Update from localStorage only if isFavorite is not passed as prop
     if (this.characterId !== null && this.isFavorite === undefined) {
       const favs = JSON.parse(
         localStorage.getItem(STORAGE_KEYS.FAVORITES) || '[]'
@@ -73,9 +73,9 @@ export class FavoriteButton extends LitElement {
     if (changedProps.has('characterId')) {
       this._updateFavoriteState();
     }
-    // Si se pasa isFavorite como prop, usarlo directamente
+    // If isFavorite is passed as prop, use it directly
     if (changedProps.has('isFavorite') && this.isFavorite !== undefined) {
-      // El estado ya está actualizado por la prop
+      // The state is already updated by the prop
     }
   }
 
@@ -83,7 +83,7 @@ export class FavoriteButton extends LitElement {
     e.stopPropagation();
     if (this.characterId === null || !this.character) return;
 
-    // Animación de pop
+    // Pop animation
     const icon = e.currentTarget.querySelector('.favorite-icon');
     if (icon) {
       icon.classList.remove('pop');
@@ -98,10 +98,10 @@ export class FavoriteButton extends LitElement {
       );
     }
 
-    // Actualizar el estado local inmediatamente
+    // Update local state immediately
     this.isFavorite = !this.isFavorite;
 
-    // Emitir evento
+    // Emit event
     this.dispatchEvent(
       new CustomEvent('favorite-toggled', {
         detail: {
@@ -118,7 +118,7 @@ export class FavoriteButton extends LitElement {
   render() {
     if (this.characterId === null) return html``;
 
-    // Determinar qué imagen mostrar
+    // Determine which image to show
     let imageSrc;
     if (this.isFavorite && this.isCardHovered) {
       imageSrc = '/heart_white.svg';
