@@ -5,7 +5,7 @@ import '../common/marvel-spinner.js';
 import '../common/search-container.js';
 import { characters } from '../../services/characters.js';
 import { characterListStyle } from './character-list-style';
-import { STORAGE_KEYS } from '../../constants/app-constants.js';
+import { STORAGE_KEYS, SEARCH_CONFIG } from '../../constants/app-constants.js';
 
 export class CharacterList extends LitElement {
   static properties = {
@@ -16,6 +16,7 @@ export class CharacterList extends LitElement {
     resetSearchFlag: { type: Boolean },
     customTitle: { type: String },
     initialSearchTerm: { type: String },
+    isFavoritesMode: { type: Boolean },
   };
 
   static get styles() {
@@ -30,18 +31,42 @@ export class CharacterList extends LitElement {
     this.error = '';
     this.customTitle = '';
     this.initialSearchTerm = '';
+    this._hasLoadedCharacters = false; // Bandera para evitar llamadas duplicadas
+
+    // Detectar si estamos en modo favoritos basado en la URL
+    const urlParams = new URLSearchParams(window.location.search);
+    this.isFavoritesMode = urlParams.get('favorites') === 'true';
+
     this.addEventListener('go-home', this._handleGoHome.bind(this));
   }
 
   connectedCallback() {
     super.connectedCallback();
-    // Cargar personajes si no se pasan externamente
-    if (!this.characters || this.characters.length === 0) {
+
+    // Si estamos en modo favoritos y no hay personajes, cargar desde localStorage
+    if (
+      this.isFavoritesMode &&
+      (!this.characters || this.characters.length === 0)
+    ) {
+      this._loadFavoritesFromStorage();
+    }
+    // Cargar personajes si no se pasan externamente y no estamos en modo favoritos
+    else if (
+      (!this.characters || this.characters.length === 0) &&
+      !this.isFavoritesMode &&
+      !this._hasLoadedCharacters
+    ) {
       this._loadCharacters();
     }
   }
 
   async _loadCharacters() {
+    if (this._hasLoadedCharacters) {
+      return;
+    }
+
+    this._hasLoadedCharacters = true;
+
     try {
       this.loading = true;
       this.error = '';
@@ -60,6 +85,7 @@ export class CharacterList extends LitElement {
     } catch (err) {
       console.error('❌ Error loading characters:', err);
       this.error = 'Error loading characters. Please try again.';
+      this._hasLoadedCharacters = false; // Reset flag on error
     } finally {
       this.loading = false;
     }
@@ -109,7 +135,12 @@ export class CharacterList extends LitElement {
   _handleGoHome() {
     this.searchTerm = '';
     this.characters = [];
-    this._loadCharacters();
+    this.isFavoritesMode = false;
+    this._hasLoadedCharacters = false; // Reset flag when going home
+    // Solo cargar personajes si no estamos en modo favoritos
+    if (!this.isFavoritesMode) {
+      this._loadCharacters();
+    }
     this.requestUpdate();
   }
 
@@ -135,7 +166,24 @@ export class CharacterList extends LitElement {
     if (changedProps.has('resetSearchFlag')) {
       this.searchTerm = '';
       this.characters = [];
-      this._loadCharacters();
+      // Solo cargar personajes si no estamos en modo favoritos y no se han cargado ya
+      if (!this.isFavoritesMode && !this._hasLoadedCharacters) {
+        this._loadCharacters();
+      }
+    }
+
+    // Detectar si estamos en modo favoritos basado en el customTitle
+    if (changedProps.has('customTitle')) {
+      this.isFavoritesMode = this.customTitle === 'Favorites';
+      // Si estamos en modo favoritos, detener el loading inmediatamente
+      if (this.isFavoritesMode) {
+        this.loading = false;
+        this.error = '';
+        // Si no hay personajes, cargar desde localStorage
+        if (!this.characters || this.characters.length === 0) {
+          this._loadFavoritesFromStorage();
+        }
+      }
     }
 
     // Si se pasan personajes externos (como en favoritos), detener el loading
@@ -151,8 +199,8 @@ export class CharacterList extends LitElement {
     // Si se pasa un término de búsqueda inicial, aplicarlo
     if (changedProps.has('initialSearchTerm') && this.initialSearchTerm) {
       this.searchTerm = this.initialSearchTerm;
-      // Si hay 3 o más caracteres, realizar la búsqueda
-      if (this.initialSearchTerm.length >= 3) {
+      // Si hay suficientes caracteres, realizar la búsqueda
+      if (this.initialSearchTerm.length >= SEARCH_CONFIG.MIN_LENGTH) {
         this._performSearch(this.initialSearchTerm);
       }
     }
@@ -209,6 +257,24 @@ export class CharacterList extends LitElement {
 
   get characters() {
     return this._characters || [];
+  }
+
+  _loadFavoritesFromStorage() {
+    try {
+      const favs = JSON.parse(
+        localStorage.getItem(STORAGE_KEYS.FAVORITES) || '[]'
+      );
+      this.characters = favs.map((character) => ({
+        ...character,
+        favorite: true,
+      }));
+      this.loading = false;
+      this.error = '';
+    } catch (err) {
+      console.error('❌ Error loading favorites from localStorage:', err);
+      this.error = 'Error loading favorites.';
+      this.loading = false;
+    }
   }
 }
 

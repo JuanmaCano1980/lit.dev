@@ -1,10 +1,11 @@
 import { LitElement, html } from 'lit';
 import { searchContainerStyle } from './search-container-style.js';
+import { SEARCH_CONFIG } from '../../constants/app-constants.js';
+
+/* global clearTimeout */
 
 export class SearchContainer extends LitElement {
   // Configuración de búsqueda
-  static MIN_SEARCH_LENGTH = 3;
-  static SEARCH_DEBOUNCE_MS = 400;
   static properties = {
     searchTerm: { type: String },
     initialSearchTerm: { type: String },
@@ -19,37 +20,44 @@ export class SearchContainer extends LitElement {
     super();
     this.searchTerm = '';
     this.initialSearchTerm = '';
-    this.placeholder = 'SEARCH A CHARACTER...';
-    this._debounceTimeout = null;
+    this.placeholder = 'Search for a character...';
+    this.debounceTimer = null;
   }
 
   _handleSearchChange(e) {
-    this.searchTerm = e.target.value;
+    const value = e.target.value;
+    this.searchTerm = value;
 
-    // Emitir evento de cambio de búsqueda
+    // Clear existing timer
+    if (this.debounceTimer) {
+      clearTimeout(this.debounceTimer);
+    }
+
+    // Set new timer for debounced search
+    this.debounceTimer = setTimeout(() => {
+      if (this.searchTerm.length >= SEARCH_CONFIG.MIN_LENGTH) {
+        this._performSearch();
+      } else if (this.searchTerm.length === 0) {
+        // If search is cleared, emit event to reset
+        this.dispatchEvent(
+          new CustomEvent('search-change', {
+            detail: '',
+            bubbles: true,
+            composed: true,
+          })
+        );
+      }
+    }, SEARCH_CONFIG.DEBOUNCE_MS);
+  }
+
+  _performSearch() {
     this.dispatchEvent(
-      new CustomEvent('search-change', {
+      new CustomEvent('search-perform', {
         detail: this.searchTerm,
         bubbles: true,
         composed: true,
       })
     );
-
-    // Solo buscar si la cadena tiene la longitud mínima, con debounce
-    if (this._debounceTimeout) {
-      window.clearTimeout(this._debounceTimeout);
-    }
-    if (this.searchTerm.length >= SearchContainer.MIN_SEARCH_LENGTH) {
-      this._debounceTimeout = window.setTimeout(() => {
-        this.dispatchEvent(
-          new CustomEvent('search-perform', {
-            detail: this.searchTerm,
-            bubbles: true,
-            composed: true,
-          })
-        );
-      }, SearchContainer.SEARCH_DEBOUNCE_MS);
-    }
   }
 
   updated(changedProps) {

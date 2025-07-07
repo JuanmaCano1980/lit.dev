@@ -3,6 +3,7 @@ import { characterDetailStyle } from './character-detail-style.js';
 import './header-character-detail.js';
 import './comics-section.js';
 import { api } from '../../services/api.js';
+import { API_CONFIG } from '../../constants/app-constants.js';
 
 export class CharacterDetail extends LitElement {
   static properties = {
@@ -66,7 +67,7 @@ export class CharacterDetail extends LitElement {
       this.loadingComics = true;
 
       const response = await api.getCharacterComics(this.character.id, {
-        limit: 20,
+        limit: API_CONFIG.SEARCH_LIMIT,
         orderBy: '-focDate', // Ordenar por fecha de enfoque (más recientes primero)
       });
 
