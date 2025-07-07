@@ -1,6 +1,9 @@
-/* global console */
 import { LitElement, html } from 'lit';
 import { comicsSectionStyle } from './comics-section-style.js';
+import {
+  getMarvelImageUrl,
+  handleImageError,
+} from '../../utils/image-utils.js';
 import '../common/marvel-spinner.js';
 
 export class ComicsSection extends LitElement {
@@ -34,7 +37,7 @@ export class ComicsSection extends LitElement {
         <section class="comics-section">
           <h2 class="comics-title">COMICS</h2>
           <p style="color: #888; text-align: center; padding: 2rem;">
-            No hay cómics disponibles para este personaje.
+            No comics available for this character.
           </p>
         </section>
       `;
@@ -49,13 +52,9 @@ export class ComicsSection extends LitElement {
               <div class="comic-card">
                 <img
                   class="comic-cover"
-                  src="${comic.thumbnail?.path && comic.thumbnail?.extension
-                    ? `${comic.thumbnail.path}/portrait_medium.${comic.thumbnail.extension}`
-                    : '/placeholder.svg'}"
+                  src="${getMarvelImageUrl(comic.thumbnail, 'portrait_medium')}"
                   alt="${comic.title || comic.name || 'Comic cover'}"
-                  @error=${(e) => {
-                    e.target.src = '/placeholder.svg';
-                  }}
+                  @error=${handleImageError}
                 />
                 <div class="comic-info">
                   <div class="comic-title">

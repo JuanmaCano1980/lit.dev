@@ -1,6 +1,10 @@
 import { LitElement, html } from 'lit';
 import { characterCardStyle } from './character-card-style';
 import '../common/favorite-button.js';
+import {
+  getMarvelImageUrl,
+  handleImageError,
+} from '../../utils/image-utils.js';
 
 export class CharacterCard extends LitElement {
   static properties = {
@@ -43,24 +47,8 @@ export class CharacterCard extends LitElement {
   render() {
     if (!this.character) return html``;
 
-    let imageUrl = '/placeholder.svg';
-
-    if (this.character.thumbnail?.path && this.character.thumbnail?.extension) {
-      const basePath = this.character.thumbnail.path;
-      const extension = this.character.thumbnail.extension;
-
-      // Check if it's a valid Marvel image
-      if (
-        basePath.includes('image_not_available') ||
-        basePath.includes('4c002e0300000') ||
-        basePath.includes('f002')
-      ) {
-        imageUrl = '/placeholder.svg';
-      } else {
-        // Use Marvel image with standard size
-        imageUrl = `${basePath}/standard_large.${extension}`;
-      }
-    }
+    // Build image URL using utility function
+    const imageUrl = getMarvelImageUrl(this.character.thumbnail);
 
     return html`
       <div class="card" @click=${this._handleClick}>
@@ -102,7 +90,7 @@ export class CharacterCard extends LitElement {
     // Fallback to local placeholder if image fails
     this.imageError = true;
     this.imageLoaded = true; // To show the placeholder
-    e.target.src = '/placeholder.svg';
+    handleImageError(e);
   }
 
   _handleImageLoad() {

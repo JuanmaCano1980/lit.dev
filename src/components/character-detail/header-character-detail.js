@@ -1,6 +1,7 @@
 import { LitElement, html } from 'lit';
 import { headerCharacterDetailStyle } from './header-character-detail-style.js';
 import '../common/favorite-button.js';
+import { getMarvelImageUrl } from '../../utils/image-utils.js';
 
 export class HeaderCharacterDetail extends LitElement {
   static properties = {
@@ -12,7 +13,7 @@ export class HeaderCharacterDetail extends LitElement {
   }
 
   _handleFavoriteToggled() {
-    // Emitir evento para que character-detail lo maneje
+    // Emit event to handle in character-detail
     this.dispatchEvent(
       new CustomEvent('favorites-changed', {
         bubbles: true,
@@ -26,10 +27,10 @@ export class HeaderCharacterDetail extends LitElement {
       return html``;
     }
 
-    const imageUrl =
-      this.character.thumbnail?.path && this.character.thumbnail?.extension
-        ? `${this.character.thumbnail.path}.${this.character.thumbnail.extension}`
-        : '/placeholder.svg';
+    const imageUrl = getMarvelImageUrl(
+      this.character.thumbnail,
+      'portrait_uncanny'
+    );
 
     return html`
       <section class="main-detail-full">
@@ -55,7 +56,7 @@ export class HeaderCharacterDetail extends LitElement {
             </div>
             <p class="character-description">
               ${this.character.description ||
-              'Este personaje no tiene descripción disponible en este momento.'}
+              'This character has no description available at the moment.'}
             </p>
           </div>
         </div>
