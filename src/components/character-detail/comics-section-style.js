@@ -3,9 +3,19 @@ import { css } from 'lit';
 export const comicsSectionStyle = css`
   .comics-section {
     background: var(--marvel-white, #ffffff);
-    padding: 2.5rem 2rem 2.5rem 2rem;
-    border-radius: 0 0 10px 10px;
+    padding: 2.5rem 0 2.5rem 0;
     margin-top: 0;
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .comics-content {
+    width: 100vw;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
   }
 
   .comics-title {
@@ -22,8 +32,6 @@ export const comicsSectionStyle = css`
     gap: 2.2rem;
     overflow-x: auto;
     padding-bottom: 0.5rem;
-
-    /* Estilos personalizados para el scrollbar */
     scrollbar-width: thin;
     scrollbar-color: var(--marvel-red, #e62429) #f0f0f0;
   }
@@ -49,29 +57,18 @@ export const comicsSectionStyle = css`
 
   .comic-card {
     background: var(--marvel-white, #ffffff);
-    border-radius: 10px;
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
     display: flex;
     flex-direction: column;
     align-items: center;
     min-width: 180px;
     max-width: 180px;
-    transition:
-      box-shadow 0.2s,
-      border-bottom 0.2s;
-    border-bottom: 3px solid transparent;
     cursor: pointer;
-  }
-  .comic-card:hover {
-    box-shadow: 0 8px 24px rgba(230, 36, 41, 0.13);
-    border-bottom: 3px solid var(--marvel-red, #e62429);
   }
 
   .comic-cover {
     width: 180px;
     height: 260px;
     object-fit: cover;
-    border-radius: 7px;
     margin-bottom: 0.7rem;
     background: #eee;
   }
@@ -94,18 +91,23 @@ export const comicsSectionStyle = css`
     font-size: 0.95rem;
     color: #888;
     font-weight: 500;
-    border-top: 1px solid #eee;
     padding-top: 0.2rem;
   }
 
   @media (max-width: 900px) {
     .comics-section {
-      padding: 1.5rem 1rem 1.5rem 1rem;
+      padding: 1.5rem 0 1.5rem 0;
+    }
+    .comics-content {
+      padding: 0 1rem;
     }
   }
   @media (max-width: 600px) {
     .comics-section {
-      padding: 1.2rem 0.3rem 1.2rem 0.3rem;
+      padding: 1.2rem 0 1.2rem 0;
+    }
+    .comics-content {
+      padding: 0 0.5rem;
     }
     .comics-list {
       gap: 1rem;

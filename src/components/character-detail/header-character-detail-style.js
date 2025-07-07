@@ -4,12 +4,18 @@ export const headerCharacterDetailStyle = css`
   .main-detail-full {
     width: 100vw;
     background: var(--marvel-black, #000000);
-    border-bottom: 6px solid var(--marvel-red, #e62429);
     padding: 0;
     height: 340px;
     display: flex;
     align-items: stretch;
     overflow: hidden;
+    clip-path: polygon(
+      0 0,
+      100% 0,
+      100% calc(100% - 30px),
+      calc(100% - 30px) 100%,
+      0 100%
+    );
   }
 
   .main-detail-content {

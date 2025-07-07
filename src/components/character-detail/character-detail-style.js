@@ -8,11 +8,8 @@ export const characterDetailStyle = css`
   }
 
   .character-detail-root {
-    background: red;
-    border-radius: 0 0 10px 10px;
     overflow: hidden;
     margin: 0 auto;
-    box-shadow: 0 2px 16px rgba(0, 0, 0, 0.07);
   }
 
   .no-character {
