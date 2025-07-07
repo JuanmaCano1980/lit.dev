@@ -1,10 +1,11 @@
 import { api } from './api.js';
+import { API_CONFIG } from '../constants/app-constants.js';
 
 class CharactersService {
   async initialize() {
     const offset = 0;
     const response = await api.getCharacters({
-      limit: 50,
+      limit: API_CONFIG.DEFAULT_LIMIT,
       offset: offset,
     });
 
@@ -24,7 +25,7 @@ class CharactersService {
     return this.initialize();
   }
 
-  async search(query, limit = 20) {
+  async search(query, limit = API_CONFIG.SEARCH_LIMIT) {
     const response = await api.searchCharacters(query, { limit });
     return response.data.results;
   }

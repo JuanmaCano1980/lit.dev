@@ -2,7 +2,13 @@ import { LitElement, html } from 'lit';
 import './marvel-header.js';
 import './character-list.js';
 import '../character-detail/character-detail.js';
+import '../common/marvel-spinner.js';
 import { marvelAppStyle } from './marvel-app-style';
+import {
+  VIEWS,
+  STORAGE_KEYS,
+  URL_PARAMS,
+} from '../../constants/app-constants.js';
 
 export class MarvelApp extends LitElement {
   static properties = {
@@ -12,6 +18,7 @@ export class MarvelApp extends LitElement {
     favorites: { type: Array },
     resetSearchFlag: { type: Boolean },
     searchTerm: { type: String },
+    isLoading: { type: Boolean },
   };
 
   static get styles() {
@@ -21,18 +28,20 @@ export class MarvelApp extends LitElement {
   constructor() {
     super();
     this.selectedCharacter = null;
-    this.view = 'list'; // 'list', 'detail' o 'favorites'
+    this.view = VIEWS.LIST;
     this.favoritesCount = 0;
     this.favorites = [];
     this.resetSearchFlag = false;
     this.searchTerm = '';
+    this.isLoading = true;
     this._loadFavorites();
     this._updateFavoritesCount();
-    this._handleQueryParams();
   }
 
   _loadFavorites() {
-    const favs = JSON.parse(localStorage.getItem('marvel-favorites') || '[]');
+    const favs = JSON.parse(
+      localStorage.getItem(STORAGE_KEYS.FAVORITES) || '[]'
+    );
     // Ensure all favorites have the favorite: true property
     this.favorites = favs.map((character) => ({
       ...character,
@@ -41,13 +50,15 @@ export class MarvelApp extends LitElement {
   }
 
   _updateFavoritesCount() {
-    const favs = JSON.parse(localStorage.getItem('marvel-favorites') || '[]');
+    const favs = JSON.parse(
+      localStorage.getItem(STORAGE_KEYS.FAVORITES) || '[]'
+    );
     this.favoritesCount = favs.length;
   }
 
   _handleFavoriteToggled(e) {
     const { character, isFavorite } = e.detail;
-    let favs = JSON.parse(localStorage.getItem('marvel-favorites') || '[]');
+    let favs = JSON.parse(localStorage.getItem(STORAGE_KEYS.FAVORITES) || '[]');
     if (isFavorite) {
       // Add only if it doesn't exist
       if (!favs.some((c) => c.id === character.id)) {
@@ -56,7 +67,7 @@ export class MarvelApp extends LitElement {
     } else {
       favs = favs.filter((c) => c.id !== character.id);
     }
-    localStorage.setItem('marvel-favorites', JSON.stringify(favs));
+    localStorage.setItem(STORAGE_KEYS.FAVORITES, JSON.stringify(favs));
     this._loadFavorites();
     this._updateFavoritesCount();
 
@@ -74,23 +85,25 @@ export class MarvelApp extends LitElement {
   _handleCharacterSelect(e) {
     const character = e.detail;
     // Check if character is in favorites and add favorite property
-    const favs = JSON.parse(localStorage.getItem('marvel-favorites') || '[]');
+    const favs = JSON.parse(
+      localStorage.getItem(STORAGE_KEYS.FAVORITES) || '[]'
+    );
     this.selectedCharacter = {
       ...character,
       favorite: favs.some((c) => c.id === character.id),
     };
-    this.view = 'detail';
+    this.view = VIEWS.DETAIL;
     this._updateURL();
   }
 
   _handleBackToList() {
-    this.view = 'list';
+    this.view = VIEWS.LIST;
     this.selectedCharacter = null;
     this._clearURL();
   }
 
   _handleGoHome() {
-    this.view = 'list';
+    this.view = VIEWS.LIST;
     this.selectedCharacter = null;
     this.searchTerm = '';
     this.resetSearchFlag = !this.resetSearchFlag;
@@ -103,21 +116,23 @@ export class MarvelApp extends LitElement {
   }
 
   _handleShowFavorites() {
-    const favs = JSON.parse(localStorage.getItem('marvel-favorites') || '[]');
+    const favs = JSON.parse(
+      localStorage.getItem(STORAGE_KEYS.FAVORITES) || '[]'
+    );
     // Ensure all favorites have the favorite: true property
     this.favorites = favs.map((character) => ({
       ...character,
       favorite: true,
     }));
-    this.view = 'favorites';
+    this.view = VIEWS.FAVORITES;
     this._updateURL();
   }
 
-  _handleQueryParams() {
+  async _handleQueryParams() {
     const urlParams = new URLSearchParams(window.location.search);
-    const search = urlParams.get('search');
-    const favorites = urlParams.get('favorites');
-    const characterId = urlParams.get('id');
+    const search = urlParams.get(URL_PARAMS.SEARCH);
+    const favorites = urlParams.get(URL_PARAMS.FAVORITES);
+    const characterId = urlParams.get(URL_PARAMS.CHARACTER_ID);
 
     if (favorites === 'true') {
       this._handleShowFavorites();
@@ -130,14 +145,16 @@ export class MarvelApp extends LitElement {
 
     if (characterId) {
       // Handle direct character detail view
-      this._handleDirectCharacterDetail(characterId);
+      await this._handleDirectCharacterDetail(characterId);
     }
   }
 
   async _handleDirectCharacterDetail(characterId) {
     try {
       // Try to find character in favorites first
-      const favs = JSON.parse(localStorage.getItem('marvel-favorites') || '[]');
+      const favs = JSON.parse(
+        localStorage.getItem(STORAGE_KEYS.FAVORITES) || '[]'
+      );
       const favoriteCharacter = favs.find(
         (c) => c.id.toString() === characterId
       );
@@ -147,7 +164,7 @@ export class MarvelApp extends LitElement {
           ...favoriteCharacter,
           favorite: true,
         };
-        this.view = 'detail';
+        this.view = VIEWS.DETAIL;
         return;
       }
 
@@ -164,16 +181,16 @@ export class MarvelApp extends LitElement {
           ...character,
           favorite: isFavorite,
         };
-        this.view = 'detail';
+        this.view = VIEWS.DETAIL;
       } else {
         // Character not found, redirect to list
-        this.view = 'list';
+        this.view = VIEWS.LIST;
         this._clearURL();
       }
     } catch (error) {
       console.error('Error loading character from URL params:', error);
       // On error, redirect to list
-      this.view = 'list';
+      this.view = VIEWS.LIST;
       this._clearURL();
     }
   }
@@ -182,16 +199,16 @@ export class MarvelApp extends LitElement {
     const url = new URL(window.location);
     const params = new URLSearchParams();
 
-    if (this.view === 'favorites') {
-      params.set('favorites', 'true');
+    if (this.view === VIEWS.FAVORITES) {
+      params.set(URL_PARAMS.FAVORITES, 'true');
     }
 
     if (this.searchTerm) {
-      params.set('search', this.searchTerm);
+      params.set(URL_PARAMS.SEARCH, this.searchTerm);
     }
 
-    if (this.view === 'detail' && this.selectedCharacter) {
-      params.set('id', this.selectedCharacter.id.toString());
+    if (this.view === VIEWS.DETAIL && this.selectedCharacter) {
+      params.set(URL_PARAMS.CHARACTER_ID, this.selectedCharacter.id.toString());
     }
 
     url.search = params.toString();
@@ -203,7 +220,7 @@ export class MarvelApp extends LitElement {
   }
 
   // Listen for favorites changes
-  connectedCallback() {
+  async connectedCallback() {
     super.connectedCallback();
     window.addEventListener('storage', this._updateFavoritesCount.bind(this));
     // Listen for favorite-toggled events from anywhere
@@ -211,6 +228,10 @@ export class MarvelApp extends LitElement {
       'favorite-toggled',
       this._updateFavoritesCount.bind(this)
     );
+
+    // Handle query params after component is fully connected
+    await this._handleQueryParams();
+    this.isLoading = false;
   }
   disconnectedCallback() {
     window.removeEventListener(
@@ -240,6 +261,50 @@ export class MarvelApp extends LitElement {
     this._updateURL();
   }
 
+  // Métodos helper para renderizar vistas
+  _renderCharacterList(customTitle = '', characters = null) {
+    return html`
+      <character-list
+        .customTitle=${customTitle}
+        .characters=${characters}
+        .initialSearchTerm=${this.searchTerm}
+        @character-selected=${this._handleCharacterSelect}
+        @favorites-changed=${this._handleFavoritesChanged}
+        @favorite-toggled=${this._handleFavoriteToggled}
+        @search-change=${this._handleSearchChange}
+        .resetSearchFlag=${this.resetSearchFlag}
+      ></character-list>
+    `;
+  }
+
+  _renderCharacterDetail() {
+    return html`
+      <character-detail
+        .character=${this.selectedCharacter}
+        @back-to-list=${this._handleBackToList}
+        @favorites-changed=${this._handleDetailFavoritesChanged}
+        @favorite-toggled=${this._handleFavoriteToggled}
+      ></character-detail>
+    `;
+  }
+
+  _renderMainContent() {
+    if (this.isLoading) {
+      return html`<marvel-spinner></marvel-spinner>`;
+    }
+
+    switch (this.view) {
+      case VIEWS.LIST:
+        return this._renderCharacterList();
+      case VIEWS.FAVORITES:
+        return this._renderCharacterList('Favorites', this.favorites);
+      case VIEWS.DETAIL:
+        return this._renderCharacterDetail();
+      default:
+        return this._renderCharacterList();
+    }
+  }
+
   render() {
     return html`
       <marvel-header
@@ -250,35 +315,8 @@ export class MarvelApp extends LitElement {
         .view=${this.view}
       ></marvel-header>
 
-      <main class="main-content${this.view !== 'detail' ? ' home' : ''}">
-        ${this.view === 'list'
-          ? html`<character-list
-              .customTitle=${''}
-              .initialSearchTerm=${this.searchTerm}
-              @character-selected=${this._handleCharacterSelect}
-              @favorites-changed=${this._handleFavoritesChanged}
-              @favorite-toggled=${this._handleFavoriteToggled}
-              @search-change=${this._handleSearchChange}
-              .resetSearchFlag=${this.resetSearchFlag}
-            ></character-list>`
-          : this.view === 'favorites'
-            ? html`
-                <character-list
-                  .characters=${this.favorites}
-                  .customTitle=${'Favorites'}
-                  .initialSearchTerm=${this.searchTerm}
-                  @character-selected=${this._handleCharacterSelect}
-                  @favorites-changed=${this._handleFavoritesChanged}
-                  @favorite-toggled=${this._handleFavoriteToggled}
-                  @search-change=${this._handleSearchChange}
-                ></character-list>
-              `
-            : html`<character-detail
-                .character=${this.selectedCharacter}
-                @back-to-list=${this._handleBackToList}
-                @favorites-changed=${this._handleDetailFavoritesChanged}
-                @favorite-toggled=${this._handleFavoriteToggled}
-              ></character-detail>`}
+      <main class="main-content${this.view !== VIEWS.DETAIL ? ' home' : ''}">
+        ${this._renderMainContent()}
       </main>
     `;
   }

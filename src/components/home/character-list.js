@@ -5,6 +5,7 @@ import '../common/marvel-spinner.js';
 import '../common/search-container.js';
 import { characters } from '../../services/characters.js';
 import { characterListStyle } from './character-list-style';
+import { STORAGE_KEYS } from '../../constants/app-constants.js';
 
 export class CharacterList extends LitElement {
   static properties = {
@@ -35,7 +36,7 @@ export class CharacterList extends LitElement {
   connectedCallback() {
     super.connectedCallback();
     // Cargar personajes si no se pasan externamente
-    if (this.characters.length === 0) {
+    if (!this.characters || this.characters.length === 0) {
       this._loadCharacters();
     }
   }
@@ -49,7 +50,9 @@ export class CharacterList extends LitElement {
       const data = await characters.initialize();
 
       // Procesar personajes y agregar estado de favoritos
-      const favs = JSON.parse(localStorage.getItem('marvel-favorites') || '[]');
+      const favs = JSON.parse(
+        localStorage.getItem(STORAGE_KEYS.FAVORITES) || '[]'
+      );
       this.characters = data.characters.map((c) => ({
         ...c,
         favorite: favs.some((fav) => fav.id === c.id),
@@ -96,6 +99,7 @@ export class CharacterList extends LitElement {
   }
 
   get filteredCharacters() {
+    if (!this.characters) return [];
     if (!this.searchTerm) return this.characters;
     return this.characters.filter((character) =>
       character.name.toLowerCase().includes(this.searchTerm.toLowerCase())
@@ -113,7 +117,9 @@ export class CharacterList extends LitElement {
     this.loading = true;
     try {
       const results = await characters.search(searchTerm, 20);
-      const favs = JSON.parse(localStorage.getItem('marvel-favorites') || '[]');
+      const favs = JSON.parse(
+        localStorage.getItem(STORAGE_KEYS.FAVORITES) || '[]'
+      );
       this.characters = results.map((c) => ({
         ...c,
         favorite: favs.some((fav) => fav.id === c.id),
@@ -133,7 +139,11 @@ export class CharacterList extends LitElement {
     }
 
     // Si se pasan personajes externos (como en favoritos), detener el loading
-    if (changedProps.has('characters') && this.characters.length > 0) {
+    if (
+      changedProps.has('characters') &&
+      this.characters &&
+      this.characters.length > 0
+    ) {
       this.loading = false;
       this.error = '';
     }
@@ -190,6 +200,15 @@ export class CharacterList extends LitElement {
               `}
       </div>
     `;
+  }
+
+  // Asegurar que characters siempre sea un array
+  set characters(value) {
+    this._characters = Array.isArray(value) ? value : [];
+  }
+
+  get characters() {
+    return this._characters || [];
   }
 }
 
