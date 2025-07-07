@@ -1,4 +1,3 @@
-/* global console */
 import { LitElement, html } from 'lit';
 import { characterDetailStyle } from './character-detail-style.js';
 import './header-character-detail.js';
@@ -25,8 +24,8 @@ export class CharacterDetail extends LitElement {
   render() {
     if (!this.character) {
       return html`<div class="no-character">
-        <h2>No se ha seleccionado ningún personaje</h2>
-        <p>Selecciona un personaje de la lista para ver sus detalles</p>
+        <h2>No character selected</h2>
+        <p>Select a character from the list to see their details</p>
       </div>`;
     }
 
@@ -52,7 +51,11 @@ export class CharacterDetail extends LitElement {
 
   updated(changedProperties) {
     if (changedProperties.has('character') && this.character) {
-      this._loadComicsFromAPI();
+      // Only reload comics if the character ID actually changed
+      const oldCharacter = changedProperties.get('character');
+      if (!oldCharacter || oldCharacter.id !== this.character.id) {
+        this._loadComicsFromAPI();
+      }
     }
   }
 

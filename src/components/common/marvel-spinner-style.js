@@ -12,7 +12,7 @@ export const marvelSpinnerStyle = css`
     width: 40px;
     height: 40px;
     border: 4px solid #444;
-    border-top: 4px solid #ed1d24;
+    border-top: 4px solid var(--marvel-red);
     border-radius: 50%;
     animation: spin 1s linear infinite;
   }

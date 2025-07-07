@@ -32,9 +32,12 @@ export class MarvelApp extends LitElement {
   }
 
   _loadFavorites() {
-    this.favorites = JSON.parse(
-      localStorage.getItem('marvel-favorites') || '[]'
-    );
+    const favs = JSON.parse(localStorage.getItem('marvel-favorites') || '[]');
+    // Ensure all favorites have the favorite: true property
+    this.favorites = favs.map((character) => ({
+      ...character,
+      favorite: true,
+    }));
   }
 
   _updateFavoritesCount() {
@@ -56,18 +59,34 @@ export class MarvelApp extends LitElement {
     localStorage.setItem('marvel-favorites', JSON.stringify(favs));
     this._loadFavorites();
     this._updateFavoritesCount();
+
+    // Update selectedCharacter if we're in detail view
+    if (this.selectedCharacter && this.selectedCharacter.id === character.id) {
+      this.selectedCharacter = {
+        ...this.selectedCharacter,
+        favorite: isFavorite,
+      };
+    }
+
     this.requestUpdate();
   }
 
   _handleCharacterSelect(e) {
-    this.selectedCharacter = e.detail;
+    const character = e.detail;
+    // Check if character is in favorites and add favorite property
+    const favs = JSON.parse(localStorage.getItem('marvel-favorites') || '[]');
+    this.selectedCharacter = {
+      ...character,
+      favorite: favs.some((c) => c.id === character.id),
+    };
     this.view = 'detail';
+    this._updateURL();
   }
 
   _handleBackToList() {
     this.view = 'list';
     this.selectedCharacter = null;
-    this._updateURL();
+    this._clearURL();
   }
 
   _handleGoHome() {
@@ -84,9 +103,12 @@ export class MarvelApp extends LitElement {
   }
 
   _handleShowFavorites() {
-    this.favorites = JSON.parse(
-      localStorage.getItem('marvel-favorites') || '[]'
-    );
+    const favs = JSON.parse(localStorage.getItem('marvel-favorites') || '[]');
+    // Ensure all favorites have the favorite: true property
+    this.favorites = favs.map((character) => ({
+      ...character,
+      favorite: true,
+    }));
     this.view = 'favorites';
     this._updateURL();
   }
@@ -95,6 +117,7 @@ export class MarvelApp extends LitElement {
     const urlParams = new URLSearchParams(window.location.search);
     const search = urlParams.get('search');
     const favorites = urlParams.get('favorites');
+    const characterId = urlParams.get('id');
 
     if (favorites === 'true') {
       this._handleShowFavorites();
@@ -103,6 +126,55 @@ export class MarvelApp extends LitElement {
     if (search) {
       // Pass search term to character-list
       this.searchTerm = search;
+    }
+
+    if (characterId) {
+      // Handle direct character detail view
+      this._handleDirectCharacterDetail(characterId);
+    }
+  }
+
+  async _handleDirectCharacterDetail(characterId) {
+    try {
+      // Try to find character in favorites first
+      const favs = JSON.parse(localStorage.getItem('marvel-favorites') || '[]');
+      const favoriteCharacter = favs.find(
+        (c) => c.id.toString() === characterId
+      );
+
+      if (favoriteCharacter) {
+        this.selectedCharacter = {
+          ...favoriteCharacter,
+          favorite: true,
+        };
+        this.view = 'detail';
+        return;
+      }
+
+      // If not in favorites, fetch from API
+      const { api } = await import('../../services/api.js');
+      const response = await api.getCharacter(characterId);
+
+      if (response.data.results && response.data.results.length > 0) {
+        const character = response.data.results[0];
+        // Check if character is in favorites
+        const isFavorite = favs.some((c) => c.id === character.id);
+
+        this.selectedCharacter = {
+          ...character,
+          favorite: isFavorite,
+        };
+        this.view = 'detail';
+      } else {
+        // Character not found, redirect to list
+        this.view = 'list';
+        this._clearURL();
+      }
+    } catch (error) {
+      console.error('Error loading character from URL params:', error);
+      // On error, redirect to list
+      this.view = 'list';
+      this._clearURL();
     }
   }
 
@@ -116,6 +188,10 @@ export class MarvelApp extends LitElement {
 
     if (this.searchTerm) {
       params.set('search', this.searchTerm);
+    }
+
+    if (this.view === 'detail' && this.selectedCharacter) {
+      params.set('id', this.selectedCharacter.id.toString());
     }
 
     url.search = params.toString();

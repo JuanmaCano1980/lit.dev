@@ -49,6 +49,7 @@ export class HeaderCharacterDetail extends LitElement {
                 <favorite-button
                   .characterId=${this.character.id}
                   .character=${this.character}
+                  .isFavorite=${this.character.favorite || false}
                   size="large"
                   @favorite-toggled=${this._handleFavoriteToggled}
                 ></favorite-button>

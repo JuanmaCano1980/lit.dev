@@ -23,6 +23,7 @@ export default [
         customElements: 'readonly',
         URLSearchParams: 'readonly',
         URL: 'readonly',
+        console: 'readonly',
         // Module globals
         module: 'readonly',
         exports: 'readonly',
@@ -40,9 +41,6 @@ export default [
   },
   {
     files: ['src/services/**/*.js', 'src/main.js'],
-    rules: {
-      // 'no-console': 'off', // Eliminado
-    },
   },
   {
     ignores: ['dist/', 'node_modules/', '*.config.js'],
