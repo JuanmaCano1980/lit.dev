@@ -32,12 +32,9 @@ export class MarvelApp extends LitElement {
   }
 
   _loadFavorites() {
-    const favs = JSON.parse(localStorage.getItem('marvel-favorites') || '[]');
-    // Asegurar que todos los favoritos tengan la propiedad favorite: true
-    this.favorites = favs.map((character) => ({
-      ...character,
-      favorite: true,
-    }));
+    this.favorites = JSON.parse(
+      localStorage.getItem('marvel-favorites') || '[]'
+    );
   }
 
   _updateFavoritesCount() {
@@ -49,7 +46,7 @@ export class MarvelApp extends LitElement {
     const { character, isFavorite } = e.detail;
     let favs = JSON.parse(localStorage.getItem('marvel-favorites') || '[]');
     if (isFavorite) {
-      // Añadir solo si no existe
+      // Add only if it doesn't exist
       if (!favs.some((c) => c.id === character.id)) {
         favs.push(character);
       }
@@ -79,7 +76,7 @@ export class MarvelApp extends LitElement {
     this.searchTerm = '';
     this.resetSearchFlag = !this.resetSearchFlag;
     this._clearURL();
-    // Limpiar búsqueda y recargar personajes en character-list
+    // Clear search and reload characters in character-list
     const characterList = this.renderRoot?.querySelector('character-list');
     if (characterList && typeof characterList._handleGoHome === 'function') {
       characterList._handleGoHome();
@@ -87,18 +84,14 @@ export class MarvelApp extends LitElement {
   }
 
   _handleShowFavorites() {
-    const favs = JSON.parse(localStorage.getItem('marvel-favorites') || '[]');
-    // Asegurar que todos los favoritos tengan la propiedad favorite: true
-    this.favorites = favs.map((character) => ({
-      ...character,
-      favorite: true,
-    }));
+    this.favorites = JSON.parse(
+      localStorage.getItem('marvel-favorites') || '[]'
+    );
     this.view = 'favorites';
     this._updateURL();
   }
 
   _handleQueryParams() {
-    // eslint-disable-next-line no-undef
     const urlParams = new URLSearchParams(window.location.search);
     const search = urlParams.get('search');
     const favorites = urlParams.get('favorites');
@@ -108,15 +101,13 @@ export class MarvelApp extends LitElement {
     }
 
     if (search) {
-      // Pasar el término de búsqueda al character-list
+      // Pass search term to character-list
       this.searchTerm = search;
     }
   }
 
   _updateURL() {
-    // eslint-disable-next-line no-undef
     const url = new URL(window.location);
-    // eslint-disable-next-line no-undef
     const params = new URLSearchParams();
 
     if (this.view === 'favorites') {
@@ -135,11 +126,11 @@ export class MarvelApp extends LitElement {
     window.history.pushState({}, '', window.location.pathname);
   }
 
-  // Escuchar cambios en favoritos
+  // Listen for favorites changes
   connectedCallback() {
     super.connectedCallback();
     window.addEventListener('storage', this._updateFavoritesCount.bind(this));
-    // Escuchar eventos de favorite-toggled desde cualquier lugar
+    // Listen for favorite-toggled events from anywhere
     this.addEventListener(
       'favorite-toggled',
       this._updateFavoritesCount.bind(this)
@@ -157,17 +148,17 @@ export class MarvelApp extends LitElement {
     super.disconnectedCallback();
   }
 
-  // Recibir evento de favoritos desde character-list
+  // Receive favorites event from character-list
   _handleFavoritesChanged() {
     this._updateFavoritesCount();
   }
 
-  // Recibir evento de favoritos desde character-detail
+  // Receive favorites event from character-detail
   _handleDetailFavoritesChanged() {
     this._updateFavoritesCount();
   }
 
-  // Manejar búsqueda desde character-list
+  // Handle search from character-list
   _handleSearchChange(e) {
     this.searchTerm = e.detail;
     this._updateURL();

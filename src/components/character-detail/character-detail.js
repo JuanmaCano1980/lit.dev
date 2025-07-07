@@ -69,7 +69,7 @@ export class CharacterDetail extends LitElement {
 
       this.comics = response.data.results || [];
     } catch (error) {
-      console.error('Error cargando cómics desde API:', error);
+      console.error('Error loading comics from API:', error);
       this.comics = [];
     } finally {
       this.loadingComics = false;

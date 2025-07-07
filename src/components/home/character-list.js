@@ -56,8 +56,8 @@ export class CharacterList extends LitElement {
         favorite: favs.some((fav) => fav.id === c.id),
       }));
     } catch (err) {
-      console.error('❌ Error cargando personajes:', err);
-      this.error = 'Error al cargar los personajes. Intenta de nuevo.';
+      console.error('❌ Error loading characters:', err);
+      this.error = 'Error loading characters. Please try again.';
     } finally {
       this.loading = false;
     }
@@ -121,7 +121,7 @@ export class CharacterList extends LitElement {
       }));
       this.loading = false;
     } catch (err) {
-      console.error('Error en búsqueda:', err);
+      console.error('Error in search:', err);
       this.loading = false;
     }
   }
@@ -155,7 +155,7 @@ export class CharacterList extends LitElement {
         <div class="error-container">
           <div class="error-message">${this.error}</div>
           <button @click=${this._loadCharacters} class="retry-button">
-            Intentar de nuevo
+            Try again
           </button>
         </div>
       `;
@@ -180,7 +180,7 @@ export class CharacterList extends LitElement {
         ${this.loading
           ? html`<marvel-spinner></marvel-spinner>`
           : this.filteredCharacters.length === 0
-            ? html`<div class="no-results">No se encontraron personajes</div>`
+            ? html`<div class="no-results">No characters found</div>`
             : html`
                 <character-grid
                   .characters=${this.filteredCharacters}

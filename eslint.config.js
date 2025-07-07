@@ -21,6 +21,8 @@ export default [
         JSON: 'readonly',
         setTimeout: 'readonly',
         customElements: 'readonly',
+        URLSearchParams: 'readonly',
+        URL: 'readonly',
         // Module globals
         module: 'readonly',
         exports: 'readonly',

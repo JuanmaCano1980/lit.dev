@@ -83,7 +83,7 @@ export class SearchContainer extends LitElement {
           placeholder=${this.placeholder}
           .value=${this.searchTerm}
           @input=${this._handleSearchChange}
-          aria-label="Buscar personaje"
+          aria-label="Search character"
         />
       </div>
     `;

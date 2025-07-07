@@ -129,11 +129,11 @@ export class FavoriteButton extends LitElement {
       <button
         class="favorite-btn${this.isFavorite ? ' filled' : ''} ${this.size}"
         title="${this.isFavorite
-          ? 'Quitar de favoritos'
-          : 'Agregar a favoritos'}"
+          ? 'Remove from favorites'
+          : 'Add to favorites'}"
         aria-label="${this.isFavorite
-          ? 'Quitar de favoritos'
-          : 'Agregar a favoritos'}"
+          ? 'Remove from favorites'
+          : 'Add to favorites'}"
         @click=${this._toggleFavorite}
       >
         <img class="favorite-icon" src="${imageSrc}" alt="favorite" />

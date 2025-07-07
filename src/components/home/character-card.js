@@ -43,14 +43,13 @@ export class CharacterCard extends LitElement {
   render() {
     if (!this.character) return html``;
 
-    // Construir URL de imagen con fallback local
     let imageUrl = '/placeholder.svg';
 
     if (this.character.thumbnail?.path && this.character.thumbnail?.extension) {
       const basePath = this.character.thumbnail.path;
       const extension = this.character.thumbnail.extension;
 
-      // Verificar si es una imagen válida de Marvel
+      // Check if it's a valid Marvel image
       if (
         basePath.includes('image_not_available') ||
         basePath.includes('4c002e0300000') ||
@@ -58,7 +57,7 @@ export class CharacterCard extends LitElement {
       ) {
         imageUrl = '/placeholder.svg';
       } else {
-        // Usar imagen de Marvel con tamaño estándar
+        // Use Marvel image with standard size
         imageUrl = `${basePath}/standard_large.${extension}`;
       }
     }
@@ -100,9 +99,9 @@ export class CharacterCard extends LitElement {
   }
 
   _handleImageError(e) {
-    // Fallback a placeholder local si la imagen falla
+    // Fallback to local placeholder if image fails
     this.imageError = true;
-    this.imageLoaded = true; // Para que se muestre el placeholder
+    this.imageLoaded = true; // To show the placeholder
     e.target.src = '/placeholder.svg';
   }
 
