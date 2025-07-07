@@ -2,7 +2,7 @@ import { css } from 'lit';
 
 export const comicsSectionStyle = css`
   .comics-section {
-    background: var(--marvel-white, #ffffff);
+    background: white;
     padding: 2.5rem 0 2.5rem 0;
     margin-top: 0;
     width: 100vw;
@@ -56,7 +56,7 @@ export const comicsSectionStyle = css`
   }
 
   .comic-card {
-    background: var(--marvel-white, #ffffff);
+    background: white;
     display: flex;
     flex-direction: column;
     align-items: center;

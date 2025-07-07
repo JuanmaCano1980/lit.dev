@@ -1,4 +1,5 @@
 import { css } from 'lit';
+import { mediaQueries } from '../../utils/css-utils.js';
 
 export const marvelAppStyle = css`
   :host {
@@ -12,6 +13,20 @@ export const marvelAppStyle = css`
   }
 
   .main-content.home {
-    padding: 3rem;
+    padding: 1rem;
   }
+
+  /* Tablet and up */
+  ${mediaQueries.tablet(css`
+    .main-content.home {
+      padding: 2rem;
+    }
+  `)}
+
+  /* Desktop and up */
+  ${mediaQueries.desktop(css`
+    .main-content.home {
+      padding: 3rem;
+    }
+  `)}
 `;

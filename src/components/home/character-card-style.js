@@ -68,7 +68,7 @@ export const characterCardStyle = css`
     width: 30px;
     height: 30px;
     border: 3px solid #444;
-    border-top: 3px solid #ed1d24;
+    border-top: 3px solid var(--marvel-red);
     border-radius: 50%;
     animation: spin 1s linear infinite;
   }
@@ -85,8 +85,8 @@ export const characterCardStyle = css`
     transform: scale(1.08);
   }
   .card-footer {
-    background: #111;
-    color: #fff;
+    background: black;
+    color: white;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -104,7 +104,7 @@ export const characterCardStyle = css`
     top: 0;
     width: 100%;
     height: 0%;
-    background: #e62429;
+    background: var(--marvel-red);
     z-index: 0;
     transition: height 0.35s cubic-bezier(0.4, 0.2, 0.2, 1);
   }
@@ -129,11 +129,5 @@ export const characterCardStyle = css`
   favorite-button {
     position: relative;
     z-index: 10;
-  }
-
-  @media (max-width: 600px) {
-    :host {
-      width: 160px;
-    }
   }
 `;

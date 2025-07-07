@@ -21,7 +21,7 @@ export const headerCharacterDetailStyle = css`
   .main-detail-content {
     display: flex;
     flex-direction: row;
-    color: var(--marvel-white, #fff);
+    color: white;
     width: 100vw;
     height: 100%;
     max-width: 1200px;
@@ -74,7 +74,7 @@ export const headerCharacterDetailStyle = css`
     font-weight: 800;
     margin: 0 0 0.5rem 0;
     letter-spacing: -0.01em;
-    color: var(--marvel-white, #fff);
+    color: white;
     text-transform: uppercase;
     flex: 1;
   }

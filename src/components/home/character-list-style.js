@@ -12,20 +12,6 @@ export const characterListStyle = css`
     color: #333;
     text-transform: uppercase;
   }
-  .characters-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, 188px);
-    gap: 1rem;
-    justify-items: center;
-    justify-content: center;
-    width: 100%;
-    overflow-x: auto;
-  }
-  @media (max-width: 600px) {
-    .characters-grid {
-      grid-template-columns: repeat(auto-fill, 160px);
-    }
-  }
   .loading,
   .no-results {
     text-align: center;

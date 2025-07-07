@@ -1,15 +1,7 @@
-/* Variables CSS para colores del tema Marvel */
 :root {
   --marvel-red: #e62429;
-  --marvel-dark-red: #b71c1c;
-  --marvel-blue: #007bff;
-  --marvel-dark-blue: #0056b3;
-  --marvel-gray: #6c757d;
   --marvel-light-gray: #f8f9fa;
-  --marvel-dark: #343a40;
-  --marvel-white: #ffffff;
   --marvel-black: #000000;
-  --marvel-gold: #ffd700;
 }
 
 /* Reset CSS completo */
