@@ -4,6 +4,14 @@ export const characterListStyle = css`
   :host {
     display: block;
   }
+
+  .custom-title {
+    margin: 0 0 2rem 0;
+    font-size: 2rem;
+    font-weight: bold;
+    color: #333;
+    text-transform: uppercase;
+  }
   .search-container {
     margin-bottom: 2rem;
     width: 100%;

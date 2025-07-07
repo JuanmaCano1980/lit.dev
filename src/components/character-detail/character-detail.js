@@ -61,7 +61,6 @@ export class CharacterDetail extends LitElement {
 
     try {
       this.loadingComics = true;
-      console.log('Cargando cómics desde API para:', this.character.name);
 
       const response = await api.getCharacterComics(this.character.id, {
         limit: 20,
@@ -69,11 +68,6 @@ export class CharacterDetail extends LitElement {
       });
 
       this.comics = response.data.results || [];
-      console.log('Cómics cargados desde API:', this.comics.length);
-
-      if (this.comics.length > 0) {
-        console.log('Primer cómic con imagen:', this.comics[0]);
-      }
     } catch (error) {
       console.error('Error cargando cómics desde API:', error);
       this.comics = [];

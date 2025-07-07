@@ -45,7 +45,6 @@ export class ComicsSection extends LitElement {
         <h2 class="comics-title">COMICS</h2>
         <div class="comics-list">
           ${this.comics.map((comic, idx) => {
-            console.log('Renderizando cómic:', comic);
             return html`
               <div class="comic-card">
                 <img
@@ -55,11 +54,8 @@ export class ComicsSection extends LitElement {
                     : '/placeholder.svg'}"
                   alt="${comic.title || comic.name || 'Comic cover'}"
                   @error=${(e) => {
-                    console.log('Error cargando imagen:', e.target.src);
                     e.target.src = '/placeholder.svg';
                   }}
-                  @load=${() =>
-                    console.log('Imagen cargada:', comic.title || comic.name)}
                 />
                 <div class="comic-info">
                   <div class="comic-title">

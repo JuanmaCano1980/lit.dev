@@ -29,9 +29,12 @@ export class MarvelApp extends LitElement {
   }
 
   _loadFavorites() {
-    this.favorites = JSON.parse(
-      localStorage.getItem('marvel-favorites') || '[]'
-    );
+    const favs = JSON.parse(localStorage.getItem('marvel-favorites') || '[]');
+    // Asegurar que todos los favoritos tengan la propiedad favorite: true
+    this.favorites = favs.map((character) => ({
+      ...character,
+      favorite: true,
+    }));
   }
 
   _updateFavoritesCount() {
@@ -78,9 +81,12 @@ export class MarvelApp extends LitElement {
   }
 
   _handleShowFavorites() {
-    this.favorites = JSON.parse(
-      localStorage.getItem('marvel-favorites') || '[]'
-    );
+    const favs = JSON.parse(localStorage.getItem('marvel-favorites') || '[]');
+    // Asegurar que todos los favoritos tengan la propiedad favorite: true
+    this.favorites = favs.map((character) => ({
+      ...character,
+      favorite: true,
+    }));
     this.view = 'favorites';
   }
 
@@ -126,9 +132,10 @@ export class MarvelApp extends LitElement {
         .view=${this.view}
       ></marvel-header>
 
-      <main class="main-content${this.view === 'list' ? ' home' : ''}">
+      <main class="main-content${this.view !== 'detail' ? ' home' : ''}">
         ${this.view === 'list'
           ? html`<character-list
+              .customTitle=${''}
               @character-selected=${this._handleCharacterSelect}
               @favorites-changed=${this._handleFavoritesChanged}
               @favorite-toggled=${this._handleFavoriteToggled}
@@ -136,20 +143,13 @@ export class MarvelApp extends LitElement {
             ></character-list>`
           : this.view === 'favorites'
             ? html`
-                <div class="favorites-list-container">
-                  <h2>Favoritos</h2>
-                  ${this.favorites.length === 0
-                    ? html`<div>No tienes personajes favoritos.</div>`
-                    : html`
-                        <character-grid
-                          .characters=${this.favorites}
-                          @character-click=${(e) =>
-                            (this.selectedCharacter = e.detail)}
-                          @toggle-favorite=${this._handleFavoriteToggled}
-                        ></character-grid>
-                      `}
-                  <button @click=${this._handleBackToList}>Volver</button>
-                </div>
+                <character-list
+                  .characters=${this.favorites}
+                  .customTitle=${'Favorites'}
+                  @character-selected=${this._handleCharacterSelect}
+                  @favorites-changed=${this._handleFavoritesChanged}
+                  @favorite-toggled=${this._handleFavoriteToggled}
+                ></character-list>
               `
             : html`<character-detail
                 .character=${this.selectedCharacter}

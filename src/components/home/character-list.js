@@ -13,6 +13,7 @@ export class CharacterList extends LitElement {
     searchTerm: { type: String },
     error: { type: String },
     resetSearchFlag: { type: Boolean },
+    customTitle: { type: String },
   };
 
   static get styles() {
@@ -25,8 +26,8 @@ export class CharacterList extends LitElement {
     this.loading = true;
     this.searchTerm = '';
     this.error = '';
+    this.customTitle = '';
     this._debounceTimeout = null;
-    this._loadCharacters();
     this.addEventListener('go-home', this._handleGoHome.bind(this));
   }
 
@@ -44,10 +45,6 @@ export class CharacterList extends LitElement {
         ...c,
         favorite: favs.includes(c.id),
       }));
-
-      console.log(
-        `✅ Cargados ${this.characters.length} personajes aleatorios`
-      );
     } catch (err) {
       console.error('❌ Error cargando personajes:', err);
       this.error = 'Error al cargar los personajes. Intenta de nuevo.';
@@ -121,11 +118,25 @@ export class CharacterList extends LitElement {
     this.requestUpdate();
   }
 
+  connectedCallback() {
+    super.connectedCallback();
+    // Cargar personajes si no se pasan externamente
+    if (this.characters.length === 0) {
+      this._loadCharacters();
+    }
+  }
+
   updated(changedProps) {
     if (changedProps.has('resetSearchFlag')) {
       this.searchTerm = '';
       this.characters = [];
       this._loadCharacters();
+    }
+
+    // Si se pasan personajes externos (como en favoritos), detener el loading
+    if (changedProps.has('characters') && this.characters.length > 0) {
+      this.loading = false;
+      this.error = '';
     }
   }
 
@@ -142,6 +153,9 @@ export class CharacterList extends LitElement {
     }
 
     return html`
+      ${this.customTitle
+        ? html`<h2 class="custom-title">${this.customTitle}</h2>`
+        : ''}
       <div class="search-container">
         <span class="search-icon">
           <svg
