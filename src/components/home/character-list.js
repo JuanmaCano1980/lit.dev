@@ -3,6 +3,7 @@ import { LitElement, html } from 'lit';
 import './character-card.js';
 import '../common/character-grid.js';
 import '../common/marvel-spinner.js';
+import '../common/search-container.js';
 import { characters } from '../../services/characters.js';
 import { characterListStyle } from './character-list-style';
 
@@ -14,6 +15,7 @@ export class CharacterList extends LitElement {
     error: { type: String },
     resetSearchFlag: { type: Boolean },
     customTitle: { type: String },
+    initialSearchTerm: { type: String },
   };
 
   static get styles() {
@@ -27,8 +29,16 @@ export class CharacterList extends LitElement {
     this.searchTerm = '';
     this.error = '';
     this.customTitle = '';
-    this._debounceTimeout = null;
+    this.initialSearchTerm = '';
     this.addEventListener('go-home', this._handleGoHome.bind(this));
+  }
+
+  connectedCallback() {
+    super.connectedCallback();
+    // Cargar personajes si no se pasan externamente
+    if (this.characters.length === 0) {
+      this._loadCharacters();
+    }
   }
 
   async _loadCharacters() {
@@ -43,46 +53,13 @@ export class CharacterList extends LitElement {
       const favs = JSON.parse(localStorage.getItem('marvel-favorites') || '[]');
       this.characters = data.characters.map((c) => ({
         ...c,
-        favorite: favs.includes(c.id),
+        favorite: favs.some((fav) => fav.id === c.id),
       }));
     } catch (err) {
       console.error('❌ Error cargando personajes:', err);
       this.error = 'Error al cargar los personajes. Intenta de nuevo.';
     } finally {
       this.loading = false;
-    }
-  }
-
-  async _handleSearchChange(e) {
-    this.searchTerm = e.target.value;
-
-    // Si la búsqueda está vacía, mostrar todos los personajes
-    if (!this.searchTerm.trim()) {
-      return;
-    }
-
-    // Solo buscar si la cadena tiene 3 caracteres o más, con debounce
-    if (this._debounceTimeout) {
-      window.clearTimeout(this._debounceTimeout);
-    }
-    if (this.searchTerm.length >= 3) {
-      this._debounceTimeout = window.setTimeout(async () => {
-        this.loading = true;
-        try {
-          const results = await characters.search(this.searchTerm, 20);
-          const favs = JSON.parse(
-            localStorage.getItem('marvel-favorites') || '[]'
-          );
-          this.characters = results.map((c) => ({
-            ...c,
-            favorite: favs.includes(c.id),
-          }));
-          this.loading = false;
-        } catch (err) {
-          console.error('Error en búsqueda:', err);
-          this.loading = false;
-        }
-      }, 400);
     }
   }
 
@@ -104,6 +81,21 @@ export class CharacterList extends LitElement {
     );
   }
 
+  _handleSearchChange(e) {
+    this.searchTerm = e.detail;
+    this.dispatchEvent(
+      new CustomEvent('search-change', {
+        detail: this.searchTerm,
+        bubbles: true,
+        composed: true,
+      })
+    );
+  }
+
+  _handleSearchPerform(e) {
+    this._performSearch(e.detail);
+  }
+
   get filteredCharacters() {
     if (!this.searchTerm) return this.characters;
     return this.characters.filter((character) =>
@@ -118,11 +110,19 @@ export class CharacterList extends LitElement {
     this.requestUpdate();
   }
 
-  connectedCallback() {
-    super.connectedCallback();
-    // Cargar personajes si no se pasan externamente
-    if (this.characters.length === 0) {
-      this._loadCharacters();
+  async _performSearch(searchTerm) {
+    this.loading = true;
+    try {
+      const results = await characters.search(searchTerm, 20);
+      const favs = JSON.parse(localStorage.getItem('marvel-favorites') || '[]');
+      this.characters = results.map((c) => ({
+        ...c,
+        favorite: favs.some((fav) => fav.id === c.id),
+      }));
+      this.loading = false;
+    } catch (err) {
+      console.error('Error en búsqueda:', err);
+      this.loading = false;
     }
   }
 
@@ -137,6 +137,15 @@ export class CharacterList extends LitElement {
     if (changedProps.has('characters') && this.characters.length > 0) {
       this.loading = false;
       this.error = '';
+    }
+
+    // Si se pasa un término de búsqueda inicial, aplicarlo
+    if (changedProps.has('initialSearchTerm') && this.initialSearchTerm) {
+      this.searchTerm = this.initialSearchTerm;
+      // Si hay 3 o más caracteres, realizar la búsqueda
+      if (this.initialSearchTerm.length >= 3) {
+        this._performSearch(this.initialSearchTerm);
+      }
     }
   }
 
@@ -153,39 +162,20 @@ export class CharacterList extends LitElement {
     }
 
     return html`
-      ${this.customTitle
-        ? html`<h2 class="custom-title">${this.customTitle}</h2>`
-        : ''}
-      <div class="search-container">
-        <span class="search-icon">
-          <svg
-            width="22"
-            height="22"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
-            <circle cx="11" cy="11" r="8" />
-            <line x1="21" y1="21" x2="16.65" y2="16.65" />
-          </svg>
-        </span>
-        <input
-          type="text"
-          class="search-input"
-          placeholder="SEARCH A CHARACTER..."
-          .value=${this.searchTerm}
-          @input=${this._handleSearchChange}
-          aria-label="Buscar personaje"
-        />
-      </div>
+      <search-container
+        .searchTerm=${this.searchTerm}
+        .initialSearchTerm=${this.initialSearchTerm}
+        @search-change=${this._handleSearchChange}
+        @search-perform=${this._handleSearchPerform}
+      ></search-container>
       <div class="results-header">
         <div class="results-count">
           ${this.filteredCharacters.length} RESULTS
         </div>
       </div>
+      ${this.customTitle
+        ? html`<h2 class="custom-title">${this.customTitle}</h2>`
+        : ''}
       <div class="results-content">
         ${this.loading
           ? html`<marvel-spinner></marvel-spinner>`

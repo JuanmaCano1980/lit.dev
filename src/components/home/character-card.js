@@ -29,11 +29,11 @@ export class CharacterCard extends LitElement {
     );
   }
 
-  _handleFavoriteToggled() {
+  _handleFavoriteToggled(e) {
     // Emitir el evento para que character-list lo maneje
     this.dispatchEvent(
       new CustomEvent('toggle-favorite', {
-        detail: this.character,
+        detail: e.detail,
         bubbles: true,
         composed: true,
       })
@@ -90,6 +90,7 @@ export class CharacterCard extends LitElement {
           <favorite-button
             .characterId=${this.character.id}
             .character=${this.character}
+            .isFavorite=${this.character.favorite || false}
             size="medium"
             @favorite-toggled=${this._handleFavoriteToggled}
           ></favorite-button>

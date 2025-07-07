@@ -11,6 +11,7 @@ export class MarvelApp extends LitElement {
     favoritesCount: { type: Number },
     favorites: { type: Array },
     resetSearchFlag: { type: Boolean },
+    searchTerm: { type: String },
   };
 
   static get styles() {
@@ -24,8 +25,10 @@ export class MarvelApp extends LitElement {
     this.favoritesCount = 0;
     this.favorites = [];
     this.resetSearchFlag = false;
+    this.searchTerm = '';
     this._loadFavorites();
     this._updateFavoritesCount();
+    this._handleQueryParams();
   }
 
   _loadFavorites() {
@@ -67,12 +70,15 @@ export class MarvelApp extends LitElement {
   _handleBackToList() {
     this.view = 'list';
     this.selectedCharacter = null;
+    this._updateURL();
   }
 
   _handleGoHome() {
     this.view = 'list';
     this.selectedCharacter = null;
+    this.searchTerm = '';
     this.resetSearchFlag = !this.resetSearchFlag;
+    this._clearURL();
     // Limpiar búsqueda y recargar personajes en character-list
     const characterList = this.renderRoot?.querySelector('character-list');
     if (characterList && typeof characterList._handleGoHome === 'function') {
@@ -88,6 +94,45 @@ export class MarvelApp extends LitElement {
       favorite: true,
     }));
     this.view = 'favorites';
+    this._updateURL();
+  }
+
+  _handleQueryParams() {
+    // eslint-disable-next-line no-undef
+    const urlParams = new URLSearchParams(window.location.search);
+    const search = urlParams.get('search');
+    const favorites = urlParams.get('favorites');
+
+    if (favorites === 'true') {
+      this._handleShowFavorites();
+    }
+
+    if (search) {
+      // Pasar el término de búsqueda al character-list
+      this.searchTerm = search;
+    }
+  }
+
+  _updateURL() {
+    // eslint-disable-next-line no-undef
+    const url = new URL(window.location);
+    // eslint-disable-next-line no-undef
+    const params = new URLSearchParams();
+
+    if (this.view === 'favorites') {
+      params.set('favorites', 'true');
+    }
+
+    if (this.searchTerm) {
+      params.set('search', this.searchTerm);
+    }
+
+    url.search = params.toString();
+    window.history.pushState({}, '', url);
+  }
+
+  _clearURL() {
+    window.history.pushState({}, '', window.location.pathname);
   }
 
   // Escuchar cambios en favoritos
@@ -122,6 +167,12 @@ export class MarvelApp extends LitElement {
     this._updateFavoritesCount();
   }
 
+  // Manejar búsqueda desde character-list
+  _handleSearchChange(e) {
+    this.searchTerm = e.detail;
+    this._updateURL();
+  }
+
   render() {
     return html`
       <marvel-header
@@ -136,9 +187,11 @@ export class MarvelApp extends LitElement {
         ${this.view === 'list'
           ? html`<character-list
               .customTitle=${''}
+              .initialSearchTerm=${this.searchTerm}
               @character-selected=${this._handleCharacterSelect}
               @favorites-changed=${this._handleFavoritesChanged}
               @favorite-toggled=${this._handleFavoriteToggled}
+              @search-change=${this._handleSearchChange}
               .resetSearchFlag=${this.resetSearchFlag}
             ></character-list>`
           : this.view === 'favorites'
@@ -146,9 +199,11 @@ export class MarvelApp extends LitElement {
                 <character-list
                   .characters=${this.favorites}
                   .customTitle=${'Favorites'}
+                  .initialSearchTerm=${this.searchTerm}
                   @character-selected=${this._handleCharacterSelect}
                   @favorites-changed=${this._handleFavoritesChanged}
                   @favorite-toggled=${this._handleFavoriteToggled}
+                  @search-change=${this._handleSearchChange}
                 ></character-list>
               `
             : html`<character-detail

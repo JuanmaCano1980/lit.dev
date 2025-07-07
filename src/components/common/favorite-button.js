@@ -33,12 +33,6 @@ export class FavoriteButton extends LitElement {
     this._removeCardHoverDetection();
   }
 
-  updated(changedProps) {
-    if (changedProps.has('characterId')) {
-      this._updateFavoriteState();
-    }
-  }
-
   _setupCardHoverDetection() {
     // Buscar la tarjeta padre
     const card = this.closest('.card');
@@ -65,9 +59,20 @@ export class FavoriteButton extends LitElement {
   }
 
   _updateFavoriteState() {
-    if (this.characterId !== null) {
+    // Solo actualizar desde localStorage si no se pasa isFavorite como prop
+    if (this.characterId !== null && this.isFavorite === undefined) {
       const favs = JSON.parse(localStorage.getItem('marvel-favorites') || '[]');
       this.isFavorite = favs.some((c) => c.id === this.characterId);
+    }
+  }
+
+  updated(changedProps) {
+    if (changedProps.has('characterId')) {
+      this._updateFavoriteState();
+    }
+    // Si se pasa isFavorite como prop, usarlo directamente
+    if (changedProps.has('isFavorite') && this.isFavorite !== undefined) {
+      // El estado ya está actualizado por la prop
     }
   }
 
@@ -90,12 +95,15 @@ export class FavoriteButton extends LitElement {
       );
     }
 
-    // Solo emitir evento, no modificar localStorage
+    // Actualizar el estado local inmediatamente
+    this.isFavorite = !this.isFavorite;
+
+    // Emitir evento
     this.dispatchEvent(
       new CustomEvent('favorite-toggled', {
         detail: {
           characterId: this.characterId,
-          isFavorite: !this.isFavorite,
+          isFavorite: this.isFavorite,
           character: this.character,
         },
         bubbles: true,

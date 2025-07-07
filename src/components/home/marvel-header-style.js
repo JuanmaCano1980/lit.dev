@@ -46,6 +46,7 @@ export const marvelHeaderStyle = css`
     font-weight: 400;
     letter-spacing: 0.04em;
     margin-top: 0.2em;
+    cursor: pointer;
   }
   .favorites-heart {
     width: 24px;
