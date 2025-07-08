@@ -11,7 +11,7 @@ export const STORAGE_KEYS = {
 export const URL_PARAMS = {
   SEARCH: 'search',
   FAVORITES: 'favorites',
-  CHARACTER_ID: 'id',
+  CHARACTER_ID: 'superhero',
 };
 
 export const API_CONFIG = {
