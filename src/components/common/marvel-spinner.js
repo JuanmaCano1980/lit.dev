@@ -16,7 +16,11 @@ export class MarvelSpinner extends LitElement {
   }
 
   render() {
-    return html`<div class="spinner ${this.size}"></div>`;
+    return html`<div
+      class="spinner ${this.size}"
+      role="status"
+      aria-label="Loading..."
+    ></div>`;
   }
 }
 
