@@ -2,6 +2,8 @@
 
 A modern, responsive web application for exploring Marvel characters built with **Lit** and **Vite**. This application provides a seamless experience for browsing, searching, and managing favorite Marvel characters with real-time data from the Marvel API.
 
+**🌐 Live Demo: [https://lit-dev.vercel.app/](https://lit-dev.vercel.app/)**
+
 ![Marvel Heroes App](https://img.shields.io/badge/Lit-3.3.0-blue) ![Vite](https://img.shields.io/badge/Vite-7.0.0-purple) ![ESLint](https://img.shields.io/badge/ESLint-9.30.1-red) ![Prettier](https://img.shields.io/badge/Prettier-3.6.2-orange)
 
 ## ✨ Features
