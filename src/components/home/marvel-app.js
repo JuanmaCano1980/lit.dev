@@ -4,11 +4,8 @@ import './character-list.js';
 import '../character-detail/character-detail.js';
 import '../common/marvel-spinner.js';
 import { marvelAppStyle } from './marvel-app-style';
-import {
-  VIEWS,
-  STORAGE_KEYS,
-  URL_PARAMS,
-} from '../../constants/app-constants.js';
+import { VIEWS, URL_PARAMS } from '../../constants/app-constants.js';
+import { storageManager } from '../../utils/storage-utils.js';
 
 export class MarvelApp extends LitElement {
   static properties = {
@@ -39,35 +36,27 @@ export class MarvelApp extends LitElement {
   }
 
   _loadFavorites() {
-    const favs = JSON.parse(
-      localStorage.getItem(STORAGE_KEYS.FAVORITES) || '[]'
-    );
+    const favorites = storageManager.getFavorites();
     // Ensure all favorites have the favorite: true property
-    this.favorites = favs.map((character) => ({
+    this.favorites = favorites.map((character) => ({
       ...character,
       favorite: true,
     }));
   }
 
   _updateFavoritesCount() {
-    const favs = JSON.parse(
-      localStorage.getItem(STORAGE_KEYS.FAVORITES) || '[]'
-    );
-    this.favoritesCount = favs.length;
+    this.favoritesCount = storageManager.getFavoritesCount();
   }
 
   _handleFavoriteToggled(e) {
     const { character, isFavorite } = e.detail;
-    let favs = JSON.parse(localStorage.getItem(STORAGE_KEYS.FAVORITES) || '[]');
+
     if (isFavorite) {
-      // Add only if it doesn't exist
-      if (!favs.some((c) => c.id === character.id)) {
-        favs.push(character);
-      }
+      storageManager.addFavorite(character);
     } else {
-      favs = favs.filter((c) => c.id !== character.id);
+      storageManager.removeFavorite(character.id);
     }
-    localStorage.setItem(STORAGE_KEYS.FAVORITES, JSON.stringify(favs));
+
     this._loadFavorites();
     this._updateFavoritesCount();
 
@@ -85,12 +74,9 @@ export class MarvelApp extends LitElement {
   _handleCharacterSelect(e) {
     const character = e.detail;
     // Check if character is in favorites and add favorite property
-    const favs = JSON.parse(
-      localStorage.getItem(STORAGE_KEYS.FAVORITES) || '[]'
-    );
     this.selectedCharacter = {
       ...character,
-      favorite: favs.some((c) => c.id === character.id),
+      favorite: storageManager.isFavorite(character.id),
     };
     this.view = VIEWS.DETAIL;
     this._updateURL();
@@ -116,11 +102,9 @@ export class MarvelApp extends LitElement {
   }
 
   _handleShowFavorites() {
-    const favs = JSON.parse(
-      localStorage.getItem(STORAGE_KEYS.FAVORITES) || '[]'
-    );
+    const favorites = storageManager.getFavorites();
     // Ensure all favorites have the favorite: true property
-    this.favorites = favs.map((character) => ({
+    this.favorites = favorites.map((character) => ({
       ...character,
       favorite: true,
     }));
@@ -152,10 +136,8 @@ export class MarvelApp extends LitElement {
   async _handleDirectCharacterDetail(characterId) {
     try {
       // Try to find character in favorites first
-      const favs = JSON.parse(
-        localStorage.getItem(STORAGE_KEYS.FAVORITES) || '[]'
-      );
-      const favoriteCharacter = favs.find(
+      const favorites = storageManager.getFavorites();
+      const favoriteCharacter = favorites.find(
         (c) => c.id.toString() === characterId
       );
 
@@ -175,7 +157,7 @@ export class MarvelApp extends LitElement {
       if (response.data.results && response.data.results.length > 0) {
         const character = response.data.results[0];
         // Check if character is in favorites
-        const isFavorite = favs.some((c) => c.id === character.id);
+        const isFavorite = storageManager.isFavorite(character.id);
 
         this.selectedCharacter = {
           ...character,

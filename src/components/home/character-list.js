@@ -5,7 +5,8 @@ import '../common/marvel-spinner.js';
 import '../common/search-container.js';
 import { characters } from '../../services/characters.js';
 import { characterListStyle } from './character-list-style';
-import { STORAGE_KEYS, SEARCH_CONFIG } from '../../constants/app-constants.js';
+import { SEARCH_CONFIG } from '../../constants/app-constants.js';
+import { storageManager } from '../../utils/storage-utils.js';
 
 export class CharacterList extends LitElement {
   static properties = {
@@ -75,13 +76,9 @@ export class CharacterList extends LitElement {
       const data = await characters.initialize();
 
       // Process characters and add favorite state
-      const favs = JSON.parse(
-        localStorage.getItem(STORAGE_KEYS.FAVORITES) || '[]'
+      this.characters = storageManager.addFavoriteStateToCharacters(
+        data.characters
       );
-      this.characters = data.characters.map((c) => ({
-        ...c,
-        favorite: favs.some((fav) => fav.id === c.id),
-      }));
     } catch (err) {
       console.error('❌ Error loading characters:', err);
       this.error = 'Error loading characters. Please try again.';
@@ -148,13 +145,7 @@ export class CharacterList extends LitElement {
     this.loading = true;
     try {
       const results = await characters.search(searchTerm, 20);
-      const favs = JSON.parse(
-        localStorage.getItem(STORAGE_KEYS.FAVORITES) || '[]'
-      );
-      this.characters = results.map((c) => ({
-        ...c,
-        favorite: favs.some((fav) => fav.id === c.id),
-      }));
+      this.characters = storageManager.addFavoriteStateToCharacters(results);
       this.loading = false;
     } catch (err) {
       console.error('Error in search:', err);
@@ -261,10 +252,8 @@ export class CharacterList extends LitElement {
 
   _loadFavoritesFromStorage() {
     try {
-      const favs = JSON.parse(
-        localStorage.getItem(STORAGE_KEYS.FAVORITES) || '[]'
-      );
-      this.characters = favs.map((character) => ({
+      const favorites = storageManager.getFavorites();
+      this.characters = favorites.map((character) => ({
         ...character,
         favorite: true,
       }));

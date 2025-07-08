@@ -1,6 +1,6 @@
 import { LitElement, html } from 'lit';
 import { favoriteButtonStyle } from './favorite-button-style.js';
-import { STORAGE_KEYS } from '../../constants/app-constants.js';
+import { storageManager } from '../../utils/storage-utils.js';
 
 export class FavoriteButton extends LitElement {
   static properties = {
@@ -62,10 +62,7 @@ export class FavoriteButton extends LitElement {
   _updateFavoriteState() {
     // Update from localStorage only if isFavorite is not passed as prop
     if (this.characterId !== null && this.isFavorite === undefined) {
-      const favs = JSON.parse(
-        localStorage.getItem(STORAGE_KEYS.FAVORITES) || '[]'
-      );
-      this.isFavorite = favs.some((c) => c.id === this.characterId);
+      this.isFavorite = storageManager.isFavorite(this.characterId);
     }
   }
 
