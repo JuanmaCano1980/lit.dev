@@ -29,6 +29,15 @@ export class SearchContainer extends LitElement {
     const value = e.target.value;
     this.searchTerm = value;
 
+    // Emit search-change event immediately for URL updates
+    this.dispatchEvent(
+      new CustomEvent('search-change', {
+        detail: this.searchTerm,
+        bubbles: true,
+        composed: true,
+      })
+    );
+
     // Clear existing timer
     if (this.debounceTimer) {
       clearTimeout(this.debounceTimer);
@@ -38,15 +47,6 @@ export class SearchContainer extends LitElement {
     this.debounceTimer = setTimeout(() => {
       if (this.searchTerm.length >= SEARCH_CONFIG.MIN_LENGTH) {
         this._performSearch();
-      } else if (this.searchTerm.length === 0) {
-        // If search is cleared, emit event to reset
-        this.dispatchEvent(
-          new CustomEvent('search-change', {
-            detail: '',
-            bubbles: true,
-            composed: true,
-          })
-        );
       }
     }, SEARCH_CONFIG.DEBOUNCE_MS);
   }
