@@ -1,6 +1,7 @@
 import { LitElement, html } from 'lit';
 import { characterCardStyle } from './character-card-style.js';
 import './favorite-button.js';
+import './marvel-spinner.js';
 import {
   getMarvelImageUrl,
   handleImageError,
@@ -67,7 +68,7 @@ export class CharacterCard extends LitElement {
           ${!this.imageLoaded
             ? html`
                 <div class="image-loading">
-                  <div class="loading-spinner"></div>
+                  <marvel-spinner size="small"></marvel-spinner>
                 </div>
               `
             : ''}

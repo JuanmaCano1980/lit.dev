@@ -63,23 +63,6 @@ export const characterCardStyle = css`
     z-index: 1;
   }
 
-  .loading-spinner {
-    width: 30px;
-    height: 30px;
-    border: 3px solid #444;
-    border-top: 3px solid var(--marvel-red);
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-  }
-
-  @keyframes spin {
-    0% {
-      transform: rotate(0deg);
-    }
-    100% {
-      transform: rotate(360deg);
-    }
-  }
   .card:hover .character-image {
     transform: scale(1.08);
   }
