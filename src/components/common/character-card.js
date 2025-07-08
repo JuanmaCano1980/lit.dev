@@ -44,6 +44,17 @@ export class CharacterCard extends LitElement {
     );
   }
 
+  _handleImageError(e) {
+    // Fallback to local placeholder if image fails
+    this.imageError = true;
+    this.imageLoaded = true; // To show the placeholder
+    handleImageError(e);
+  }
+
+  _handleImageLoad() {
+    this.imageLoaded = true;
+  }
+
   render() {
     if (!this.character) return html``;
 
@@ -84,17 +95,6 @@ export class CharacterCard extends LitElement {
         </div>
       </div>
     `;
-  }
-
-  _handleImageError(e) {
-    // Fallback to local placeholder if image fails
-    this.imageError = true;
-    this.imageLoaded = true; // To show the placeholder
-    handleImageError(e);
-  }
-
-  _handleImageLoad() {
-    this.imageLoaded = true;
   }
 }
 

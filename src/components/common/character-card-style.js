@@ -5,7 +5,6 @@ export const characterCardStyle = css`
     display: block;
     cursor: pointer;
     user-select: none;
-    width: 188px;
     flex-shrink: 0;
   }
   .card {
