@@ -293,7 +293,7 @@ Modify `vite.config.js` for:
 
 ## 🧪 Testing
 
-The project includes a comprehensive testing setup with Vitest:
+The project includes a comprehensive testing setup with **Vitest** and **@open-wc/testing**:
 
 ```bash
 # Run all tests
@@ -304,6 +304,86 @@ npm run test:run
 
 # Watch mode for development
 npm run test:ui
+```
+
+### 🎯 Test Coverage
+
+We maintain a high test coverage to ensure code quality and reliability:
+
+- **Overall Coverage:** 84.92%
+- **Statements:** 84.92%
+- **Branches:** 80.36%
+- **Functions:** 74.82%
+- **Lines:** 84.92%
+
+### 📊 Coverage by Category
+
+- **Components (Common):** 97.24% - High coverage for reusable components
+- **Components (Home):** 75.79% - Main application components
+- **Components (Character Detail):** 88.56% - Detail view components
+- **Services:** 77.87% - API and data management
+- **Utils:** 75.5% - Utility functions
+- **Constants:** 100% - Application constants
+
+### 🧪 Test Structure
+
+```
+tests/
+├── components/           # Component tests
+│   ├── common/          # Reusable component tests
+│   ├── home/            # Main app component tests
+│   └── character-detail/ # Detail component tests
+├── services/            # Service layer tests
+└── utils/               # Utility function tests
+```
+
+### 🔧 Quality Assurance with Husky
+
+We use **Husky** to enforce code quality standards before commits:
+
+#### Pre-commit Hook
+
+The project includes a pre-commit hook that automatically runs:
+
+1. **Tests Execution** (`npx vitest run`)
+   - Ensures all tests pass before committing
+   - Blocks commits if any test fails
+   - Maintains code reliability
+
+2. **Linting** (`npx lint-staged`)
+   - Runs ESLint on staged files
+   - Automatically fixes formatting issues
+   - Ensures code style consistency
+
+#### Configuration
+
+```bash
+# .husky/pre-commit
+npx vitest run
+npx lint-staged
+```
+
+This setup ensures that:
+
+- ✅ All tests must pass before committing
+- ✅ Code follows ESLint rules
+- ✅ Code is properly formatted
+- ✅ No broken code reaches the repository
+
+### 🚀 Running Tests
+
+```bash
+# Run all tests
+npm run test
+
+# Run tests with coverage report
+npx vitest run --coverage
+
+# Run tests in watch mode
+npm run test:ui
+
+# Run specific test file
+npx vitest run tests/components/marvel-spinner.test.js
 ```
 
 ## 📦 Build & Deployment
