@@ -1,6 +1,6 @@
 import { expect, fixture, html } from '@open-wc/testing';
 import { test, describe, beforeEach } from 'vitest';
-import '../components/common/marvel-spinner.js';
+import '../../src/components/common/marvel-spinner.js';
 
 describe('MarvelSpinner', () => {
   let element;
