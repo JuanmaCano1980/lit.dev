@@ -13,21 +13,15 @@ export default [
         LitElement: 'readonly',
         html: 'readonly',
         css: 'readonly',
-        // Browser globals
+        // Browser globals (needed for ESLint)
         window: 'readonly',
         document: 'readonly',
         CustomEvent: 'readonly',
         localStorage: 'readonly',
-        JSON: 'readonly',
-        setTimeout: 'readonly',
         customElements: 'readonly',
         URLSearchParams: 'readonly',
         URL: 'readonly',
         console: 'readonly',
-        // Module globals
-        module: 'readonly',
-        exports: 'readonly',
-        require: 'readonly',
       },
     },
     plugins: {
@@ -36,11 +30,7 @@ export default [
     rules: {
       'prettier/prettier': 'error',
       'no-unused-vars': 'warn',
-      'no-undef': 'error',
     },
-  },
-  {
-    files: ['src/services/**/*.js', 'src/main.js'],
   },
   {
     ignores: ['dist/', 'node_modules/', '*.config.js'],

@@ -3,7 +3,7 @@ import { css } from 'lit';
 export const characterDetailStyle = css`
   :host {
     display: block;
-    background: var(--marvel-light-gray, #f8f9fa);
+    background: white;
     min-height: 100vh;
   }
 

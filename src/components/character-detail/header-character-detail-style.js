@@ -2,30 +2,28 @@ import { css } from 'lit';
 import { mediaQueries } from '../../utils/css-utils.js';
 
 export const headerCharacterDetailStyle = css`
-  .main-detail-full {
+  .detail-full {
     width: 100vw;
     background: var(--marvel-black, #000000);
     padding: 0;
-    height: 140px;
     display: flex;
     align-items: stretch;
     overflow: hidden;
     clip-path: polygon(
       0 0,
       100% 0,
-      100% calc(100% - 30px),
-      calc(100% - 30px) 100%,
+      100% calc(100% - 20px),
+      calc(100% - 20px) 100%,
       0 100%
     );
   }
 
-  .main-detail-content {
+  .detail-content {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     color: white;
     width: 100vw;
     height: 100%;
-    max-width: 1200px;
     margin: 0 auto;
     position: relative;
     padding: 0;
@@ -33,8 +31,8 @@ export const headerCharacterDetailStyle = css`
   }
 
   .img-col {
-    flex: 0 0 140px;
-    height: 100%;
+    width: 100%;
+    height: 400px;
     display: flex;
     align-items: stretch;
     justify-content: flex-start;
@@ -42,8 +40,8 @@ export const headerCharacterDetailStyle = css`
   }
 
   .character-image-large {
-    width: 140px;
-    height: 100%;
+    width: 100%;
+    height: 400px;
     object-fit: cover;
     border-radius: 0;
     box-shadow: none;
@@ -58,14 +56,14 @@ export const headerCharacterDetailStyle = css`
     flex-direction: column;
     justify-content: center;
     gap: 0.8rem;
-    padding: 0 0.5rem;
+    padding: 1rem;
     height: 100%;
   }
 
   .character-name-row {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: start;
     width: 100%;
     gap: 0.5rem;
   }
@@ -97,20 +95,28 @@ export const headerCharacterDetailStyle = css`
   }
 
   ${mediaQueries.tablet(css`
-    .main-detail-full {
-      height: 220px;
+    .detail-full {
+      height: 100%;
+    }
+
+    .detail-content {
+      flex-direction: row;
+      flex-direction: row;
+      align-items: center;
     }
 
     .img-col {
-      flex: 0 0 220px;
+      width: 278px;
+      height: 278px;
     }
 
     .character-image-large {
-      width: 220px;
+      width: 278px;
+      height: 278px;
     }
 
     .info-col {
-      padding: 0 1rem;
+      padding: 2rem;
       gap: 1.2rem;
     }
 
@@ -135,8 +141,19 @@ export const headerCharacterDetailStyle = css`
   `)}
 
   ${mediaQueries.desktop(css`
-    .main-detail-full {
-      height: 340px;
+    .detail-full {
+      clip-path: polygon(
+        0 0,
+        100% 0,
+        100% calc(100% - 30px),
+        calc(100% - 30px) 100%,
+        0 100%
+      );
+    }
+
+    .detail-content {
+      max-width: 1200px;
+      margin: 0 auto;
     }
 
     .img-col {

@@ -33,8 +33,8 @@ export class HeaderCharacterDetail extends LitElement {
     );
 
     return html`
-      <section class="main-detail-full">
-        <div class="main-detail-content">
+      <section class="detail-full">
+        <div class="detail-content">
           <div class="img-col">
             <img
               class="character-image-large"
