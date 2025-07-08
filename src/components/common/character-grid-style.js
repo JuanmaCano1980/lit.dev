@@ -4,7 +4,7 @@ import { mediaQueries } from '../../utils/css-utils.js';
 export const characterGridStyle = css`
   .characters-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(172.5px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(165px, 1fr));
     width: 100%;
     gap: 0.5rem;
     padding: 0;

@@ -1,9 +1,10 @@
 import { css } from 'lit';
+import { mediaQueries } from '../../utils/css-utils.js';
 
 export const comicsSectionStyle = css`
   .comics-section {
     background: white;
-    padding: 2.5rem 0 2.5rem 0;
+    padding: 1.2rem 0 1.2rem 0;
     margin-top: 0;
     width: 100vw;
     display: flex;
@@ -15,21 +16,21 @@ export const comicsSectionStyle = css`
     width: 100vw;
     max-width: 1200px;
     margin: 0 auto;
-    padding: 0 2rem;
+    padding: 0 0.5rem;
   }
 
   .comics-title {
-    font-size: 1.4rem;
+    font-size: 1.2rem;
     font-weight: 800;
     color: var(--marvel-black, #000000);
-    margin-bottom: 1.5rem;
+    margin-bottom: 1.2rem;
     letter-spacing: 0.01em;
   }
 
   .comics-list {
     display: flex;
     flex-direction: row;
-    gap: 2.2rem;
+    gap: 1rem;
     overflow-x: auto;
     padding-bottom: 0.5rem;
     scrollbar-width: thin;
@@ -60,14 +61,14 @@ export const comicsSectionStyle = css`
     display: flex;
     flex-direction: column;
     align-items: center;
-    min-width: 180px;
-    max-width: 180px;
+    min-width: 120px;
+    max-width: 120px;
     cursor: pointer;
   }
 
   .comic-cover {
-    width: 180px;
-    height: 260px;
+    width: 120px;
+    height: 170px;
     object-fit: cover;
     margin-bottom: 0.7rem;
     background: #eee;
@@ -80,7 +81,7 @@ export const comicsSectionStyle = css`
   }
 
   .comic-title {
-    font-size: 1rem;
+    font-size: 0.9rem;
     font-weight: 700;
     color: var(--marvel-black, #000000);
     margin-bottom: 0.2rem;
@@ -88,39 +89,85 @@ export const comicsSectionStyle = css`
   }
 
   .comic-year {
-    font-size: 0.95rem;
+    font-size: 0.85rem;
     color: #888;
     font-weight: 500;
     padding-top: 0.2rem;
   }
 
-  @media (max-width: 900px) {
+  ${mediaQueries.tablet(css`
     .comics-section {
       padding: 1.5rem 0 1.5rem 0;
     }
+
     .comics-content {
       padding: 0 1rem;
     }
-  }
-  @media (max-width: 600px) {
-    .comics-section {
-      padding: 1.2rem 0 1.2rem 0;
+
+    .comics-title {
+      font-size: 1.3rem;
+      margin-bottom: 1.4rem;
     }
-    .comics-content {
-      padding: 0 0.5rem;
-    }
+
     .comics-list {
-      gap: 1rem;
+      gap: 1.5rem;
     }
+
     .comic-card {
-      min-width: 120px;
-      max-width: 120px;
+      min-width: 150px;
+      max-width: 150px;
     }
+
     .comic-cover {
-      width: 120px;
-      height: 170px;
+      width: 150px;
+      height: 210px;
     }
-  }
+
+    .comic-title {
+      font-size: 0.95rem;
+    }
+
+    .comic-year {
+      font-size: 0.9rem;
+    }
+  `)}
+
+  ${mediaQueries.desktop(css`
+    .comics-section {
+      padding: 2.5rem 0 2.5rem 0;
+    }
+
+    .comics-content {
+      padding: 0 2rem;
+    }
+
+    .comics-title {
+      font-size: 1.4rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .comics-list {
+      gap: 2.2rem;
+    }
+
+    .comic-card {
+      min-width: 180px;
+      max-width: 180px;
+    }
+
+    .comic-cover {
+      width: 180px;
+      height: 260px;
+    }
+
+    .comic-title {
+      font-size: 1rem;
+    }
+
+    .comic-year {
+      font-size: 0.95rem;
+    }
+  `)}
 
   @keyframes spin {
     0% {

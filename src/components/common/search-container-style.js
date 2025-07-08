@@ -1,4 +1,5 @@
 import { css } from 'lit';
+import { mediaQueries } from '../../utils/css-utils.js';
 
 export const searchContainerStyle = css`
   .search-container {
@@ -66,7 +67,7 @@ export const searchContainerStyle = css`
     height: 3px;
   }
 
-  @media (max-width: 600px) {
+  ${mediaQueries.tablet(css`
     .search-container {
       max-width: 100%;
       padding: 0 0.5rem 0.25rem 0.5rem;
@@ -79,5 +80,5 @@ export const searchContainerStyle = css`
       width: 22px;
       height: 22px;
     }
-  }
+  `)}
 `;
